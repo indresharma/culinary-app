@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load static %}
+{% load crispy_forms_tags %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Social Net {{user.username|capfirst}}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <!--    static files and pointing to static folder -->
+  <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+  <script src="https://kit.fontawesome.com/14f2072043.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.0.slim.js"
+    integrity="sha256-sCexhaKpAfuqulKjtSY7V9H7QT0TCN90H+Y5NlmqOUE=" crossorigin="anonymous"></script>
+  
+  <script>
+    $(document).ready(function () {
+      var max_fields = 20;
+      var tag_wrapper = $(".tag-wrap");
+      var ingredient_wrapper = $(".ingredient-wrap");
+      var add_tag = $(".add-tag");
+      var add_ingredient = $(".add-ingredient");
+
+      var x = 1;
+      $(add_tag).click(function (e) {
+        e.preventDefault();
+        if (x < max_fields) {
+          x++;
+          $(tag_wrapper).append('<div><input type="text" class="form-control" name="tag"><a href="#" class="remove-tag">X</a></div>')
+        }
+      });
+      $(tag_wrapper).on("click", ".remove-tag", function (e) {
+        e.preventDefault();
+        $(this).parent('div').remove();
+        x--;
+      });
+
+      $(add_ingredient).click(function (e) {
+        e.preventDefault();
+        if (x < max_fields) {
+          x++;
+          $(ingredient_wrapper).append('<div><input type="text" class="form-control" name="ingredient"><a href="#" class="remove-ingredient">X</a></div>')
+        }
+      });
+      
+      $(ingredient_wrapper).on("click", ".remove-ingredient", function (e) {
+        e.preventDefault();
+        $(this).parent('div').remove();
+        x--;
+      });
+    });
+  </script>
+</head>
+
+<body style="background-color: #ececec;">
+  <nav class="navbar navbar-expand-lg navbar-dark mynav bg-info" role="navigation"
+    id="navbar">
+    <div class="container">
+      <div class="navbar-nav align-items-center">
+        <a class="navbar-brand mynav" href="{% url 'core:recipes' %}">Chef's Blog</a>
+      </div>
+      <div class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+
+        <a class="nav-item nav-link" href="{% url 'core:create-recipe' %}" class="btn btn-simple">Add Post</a>
+        <a class="nav-item nav-link" href="#" class="btn btn-simple">Hello,
+          {{user.email | capfirst}}</a>
+        <a class="nav-item nav-link" href="{% url 'logout' %}" class="btn btn-simple">Logout</a>
+
+        {% else %}
+        <a class="nav-item nav-link" href="{% url 'login' %}" class="btn btn-simple">Login</a>
+        <a class="nav-item nav-link" href="#" class="btn btn-simple">Sign-Up</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}}">{{message}}</div>
+    {% endfor %}
+    {% endif %}
+
+    {% if error %}
+    {% for error in errors %}
+    <div class="alert alert-danger">{{error}}</div>
+    {% endfor %}
+    {% endif %}
+  </div>
+  <div>
+    {% block body %}
+
+    {% endblock %}
+
+  </div>
+
+</body>
+<footer class="my-5 pt-5 text-muted text-center text-small">
+  <p class="mb-1">&copy; {% now "Y" %} Culinary Arts</p>
+  <ul class="list-inline">
+    <li class="list-inline-item"><a href="#">Privacy</a></li>
+    <li class="list-inline-item"><a href="#">Terms</a></li>
+    <li class="list-inline-item"><a href="#">Support</a></li>
+  </ul>
+</footer>
+
+</html>

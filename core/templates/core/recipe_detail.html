@@ -1,0 +1,30 @@
+
+{% extends 'core/base.html' %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 mt-3">
+            <img class="card" height="300px" width="350px" src="{{object.get_image_url}}">
+        </div>
+
+        <div class="col-md-7 mt-3">
+            <h2>{{object.title | capfirst}}</h2>
+            <hr>
+            <h5>Ingredients</h5>
+            <ul>
+            {% for ingredient in object.ingredients.all %}
+            <li>{{ingredient}}</li>
+            {% endfor %}
+            </ul>
+            <hr>
+            <h5>Recipe</h5>
+            <p>{{object.description| capfirst}}</p>
+            <a href="{% url 'core:update-recipe' object.id %}" class="btn btn-outline-info">Update</a>
+            <a href="{% url 'core:delete-recipe' object.id %}" class="btn btn-outline-danger">Delete</a>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
