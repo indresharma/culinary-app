@@ -66,10 +66,11 @@ class RecipeListView(View):
         random_obj = random.choices(queryset)[0]
         return render(request, 'core/recipe_list.html', {'queryset': queryset, 'random_obj': random_obj})
     
-# class UpdateTagView(View):
-#     def post(self, request, *args, **kwargs):
-#         recipe = get_object_or_404(Recipe, pk=self.pk)
-#         tag = 
+def search(request):
+    query = request.GET.get['query']
+    result = Recipe.objects.filter(tags__icontains=query)
+    return render(request, 'core/search.html', {'result': result})
+
 
 
 

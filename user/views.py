@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from user.forms import RegisterForm
 from user.models import Profile
+from core.views import OwnerOnlyMixin
 
 user = get_user_model()
 
@@ -26,7 +27,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'user/profile.html'
 
 
-class UpdateProfile(LoginRequiredMixin, UpdateView):
+class UpdateProfile(LoginRequiredMixin, OwnerOnlyMixin, UpdateView):
     model = Profile
     fields = ('fname', 'lname', 'image', 'about_me', 'location')
     success_url = 'profile'
