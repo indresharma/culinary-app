@@ -36,7 +36,7 @@ class Recipe(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self, pk):
+    def get_absolute_url(self):
         return reverse('core:detail', args=[self.pk])
 
     def get_summary(self):

@@ -1,79 +1,48 @@
 {% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
 {% block body %}
 
 <div class="container">
   <div class="row">
     <div class="col-md-6 offset-md-3 mt-4">
-      <div class="card">
+      <div class="card shadow">
         <div class="card-header bg-info text-white">
           <div class="card-title">
-            Add Post
+            <h5>Add Recipe</h5>
           </div>
         </div>
         <div class="card-body">
           <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group">
-              <label for="recipe-title">Title</label>
-              <input type="text" class="form-control" name="title" id="recipe-title">
-            </div>
-            <div class="form-group">
-              <label for="recipe-description">Description</label>
-              <input type="text" class="form-control" name="description" id="recipe-description">
-            </div>
-
-          <div class="row">
-            <div class="form-group tag-wrap col-md-9">
-              <div>
-                <label for="recipe-tag">Tags</label>
-                <input type="text" class="form-control" name="tag" id="recipe-tag">
-              </div>
-              <button type="submit" class="btn btn-primary add-tag" id="add-tag">Add Tags</button>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group ingredient-wrap col-md-9">
-              <div>
-                <label for="recipe-ingredient">Ingredients</label>
-                <input type="text" class="form-control" name="ingredient" id="recipe-ingredient">
-              </div>
-              <button type="submit" class="btn btn-primary add-ingredient" id="add-ingredients">Add Ingredients</button>
-            </div>
-          </div>
-
             <div>
-              <label for="image">Select an Image:</label>
-              <input type="file" id="image" name="image">
+              {% csrf_token %}
+              {{ form | crispy }}
             </div>
+
+            <div class="row">
+              <div class="form-group tag-wrap col-md-9">
+                <div>
+                  <label for="recipe-tag">Tags</label>
+                  <input type="text" class="form-control" name="tag" id="recipe-tag">
+                </div>
+                <button type="submit" class="btn btn-primary add-tag" id="add-tag">Add Tags</button>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="form-group ingredient-wrap col-md-9">
+                <div>
+                  <label for="recipe-ingredient">Ingredients</label>
+                  <input type="text" class="form-control" name="ingredient" id="recipe-ingredient">
+                </div>
+                <button type="submit" class="btn btn-primary add-ingredient" id="add-ingredients">Add Ingredients</button>
+              </div>
+            </div>
+
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
         </div>
       </div>
-
-
     </div>
   </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
-
 {% endblock %}

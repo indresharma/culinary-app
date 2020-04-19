@@ -1,62 +1,63 @@
 import random
-
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, TemplateView, View, UpdateView
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, DetailView, TemplateView, View, UpdateView, DeleteView, CreateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from core.models import Ingredients, Tags, Recipe
+from core.forms import RecipeForm
 
 
-@login_required
-def create_recipe(request):
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-        tags = request.POST.getlist('tag')
-        ingredients = request.POST.getlist('ingredient')
-        image = request.FILES.get('image')
+class OwnerOnlyMixin:
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.user == request.user:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return HttpResponse('Unauthorized', status=401)
 
-        form = Recipe.objects.create(title=title, description=description, user=request.user, image=image)
-        form.save()
-        if tags:
-            for tag in tags:
-                tg, created = Tags.objects.get_or_create(name=tag, user=request.user)
-                form.tags.add(tg)
-            
-        if ingredients:
-            for ingredient in ingredients:
-                ing, created = Ingredients.objects.get_or_create(name=ingredient, user=request.user)
-                form.ingredients.add(ing)
-        form.save()
-        return redirect('core:detail', form.id)
-    return render(request, 'core/recipe_form.html')
+
+class CreateRecipeView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        form = RecipeForm()
+        return render(request, 'core/recipe_form.html', {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = RecipeForm(request.POST)
+        if form.is_valid():
+            tags = request.POST.getlist('tag')
+            ingredients = request.POST.getlist('ingredient')
+            recipe = form.save(commit=False)
+            recipe.user = request.user
+            recipe.save()
+            if tags:
+                for tag in tags:
+                    tg, created = Tags.objects.get_or_create(name=tag, user=request.user)
+                    recipe.tags.add(tg)
+                
+            if ingredients:
+                for ingredient in ingredients:
+                    ing, created = Ingredients.objects.get_or_create(name=ingredient, user=request.user)
+                    recipe.ingredients.add(ing)
+            recipe.save()
+            return redirect('core:detail', recipe.id)
+        return redirect('core:create-recipe')
             
 
 class RecipeDetailView(DetailView):
     model = Recipe
 
 
-class RecipeUpdateView(LoginRequiredMixin, UpdateView):
+class RecipeUpdateView(LoginRequiredMixin, OwnerOnlyMixin, UpdateView):
     model = Recipe
-    fields = ('title', 'tags', 'ingredients', 'description', 'image')
+    form_class = RecipeForm
+    template_name = 'core/recipe_update_form.html'
 
 
-class RecipeDeleteView(LoginRequiredMixin, View):
-    def get(self, request, *args, **kwargs):
-        obj = Recipe.objects.get(pk=self.kwargs['pk'])
-        return render(request, 'core/recipe_confirm_delete.html', {'obj':obj})
-    
-
-    def post(self, request, *args, **kwargs):
-        obj = Recipe.objects.get(pk=self.kwargs['pk'])
-        if obj.user == request.user:
-            obj.delete()
-            return redirect('core:recipes')
-        else:
-            messages.error(request, 'You are not authorized to delete this post')
-            return redirect('core:recipes')
+class RecipeDeleteView(LoginRequiredMixin, OwnerOnlyMixin, DeleteView):
+    model = Recipe
         
    
 class RecipeListView(View):
@@ -65,6 +66,11 @@ class RecipeListView(View):
         random_obj = random.choices(queryset)[0]
         return render(request, 'core/recipe_list.html', {'queryset': queryset, 'random_obj': random_obj})
     
+# class UpdateTagView(View):
+#     def post(self, request, *args, **kwargs):
+#         recipe = get_object_or_404(Recipe, pk=self.pk)
+#         tag = 
+
 
 
 
