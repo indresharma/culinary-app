@@ -26,9 +26,15 @@
                 </form>
             </div>
         
-            {% for object in queryset %}
+            {% if not queryset %}
+            <h5 class="mt-4 text-center">Not Found</h5>
+            
+            {% else %}
+            {% for object in queryset %}         
             {% include 'core/_post.html' %}
             {% endfor %}
+            {% endif %}
+            
         </div>
 
     </div>
