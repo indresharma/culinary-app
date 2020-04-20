@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.conf import settings
 from django.urls import reverse
-
+from core.models import Recipe
 
 class UserManager(BaseUserManager):
     
@@ -56,3 +56,7 @@ class Profile(models.Model):
             return self.image.url
         else:
             return '/media/default_pic_profile.jpg'
+
+    def get_recipes(self):
+        recipes = Recipe.objects.filter(user=self.user)
+        return recipes

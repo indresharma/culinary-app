@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView, TemplateView, View, Updat
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.db.models import Q
 
 from core.models import Ingredients, Tags, Recipe
 from core.forms import RecipeForm
@@ -64,12 +65,15 @@ class RecipeListView(View):
     def get(self, request, *args, **kwargs):
         queryset = Recipe.objects.all()
         random_obj = random.choices(queryset)[0]
+
+        query = request.GET.get('search')
+        if query:
+            queryset = queryset.filter(
+                Q(tags__name__icontains=query) | Q(ingredients__name__icontains=query) | Q(title__icontains=query)
+                ).distinct()
         return render(request, 'core/recipe_list.html', {'queryset': queryset, 'random_obj': random_obj})
     
-def search(request):
-    query = request.GET.get['query']
-    result = Recipe.objects.filter(tags__icontains=query)
-    return render(request, 'core/search.html', {'result': result})
+
 
 
 
