@@ -28,5 +28,6 @@ urlpatterns = [
     path('profile/<int:pk>/', user_views.ProfileView.as_view(), name='profile'),
     path('login/', auth_views.LoginView.as_view(template_name='user/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='user/logout.html'), name='logout'),
+    path('update-profile/<int:pk>/', user_views.UpdateProfile.as_view(), name='update-profile'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

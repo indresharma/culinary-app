@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
-from django.views.generic import View, TemplateView, UpdateView
+from django.views.generic import CreateView, TemplateView, UpdateView, View
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -11,16 +11,21 @@ from core.views import OwnerOnlyMixin
 User = get_user_model()
 
 
-class Register(View):
-    form = RegisterForm()
-    def get(self, request, *args, **kwargs):
-        return render(request, 'user/register.html', {'form': self.form})
+class Register(CreateView): 
+    model = User
+    form_class = RegisterForm
+    template_name = 'user/register.html'
+    success_url = '/login/'
 
-    def post(self, request, *args, **kwargs):
-        form = RegisterForm(self.request.POST or None)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
+    # def get(self, request, *args, **kwargs):
+    #     form = RegisterForm()
+    #     return render(request, 'user/register.html', {'form': form})
+
+    # def post(self, request, *args, **kwargs):
+    #     form = RegisterForm(self.request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         return redirect('login')
 
 
 class ProfileView(LoginRequiredMixin, View):
@@ -29,9 +34,8 @@ class ProfileView(LoginRequiredMixin, View):
         return render(request, 'user/profile.html', {'user': user})
 
 
-
 class UpdateProfile(LoginRequiredMixin, OwnerOnlyMixin, UpdateView):
     model = Profile
-    fields = ('fname', 'lname', 'image', 'about_me', 'location')
+    fields = ('first_name', 'last_name', 'image', 'about_me', 'location')
     success_url = 'profile'
 
