@@ -14,7 +14,7 @@
 
                 <div class="card-body">
                     <h5 class="card-title text-center">{{user.profile.first_name | default:""}}
-                        {{user.profile.last_name |default_if_none:"Name"}}</h5>
+                        {{user.profile.last_name |default:""}}</h5>
                     <p class="text-center">{{user.profile.location | default_if_none:"Location"}}</p>
                 </div>
             </div>
@@ -43,7 +43,9 @@
                 </div>
                 <div>
                     <h5>Email</h5>
+                    {% if user == request.user %}
                     <p>{{user.email}}</p>
+                    {% endif %}
                 </div>
 
             </div>

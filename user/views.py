@@ -17,15 +17,14 @@ class Register(CreateView):
     template_name = 'user/register.html'
     success_url = '/login/'
 
-    # def get(self, request, *args, **kwargs):
-    #     form = RegisterForm()
-    #     return render(request, 'user/register.html', {'form': form})
-
-    # def post(self, request, *args, **kwargs):
-    #     form = RegisterForm(self.request.POST)
-    #     if form.is_valid():
-    #         form.save()
-    #         return redirect('login')
+    def form_valid(self, form):
+        first_name = form.cleaned_data.get('first_name')
+        last_name = form.cleaned_data.get('last_name')
+        user = form.save()
+        user.profile.first_name = first_name
+        user.profile.last_name = last_name
+        user.save()
+        return super().form_valid(form)
 
 
 class ProfileView(LoginRequiredMixin, View):

@@ -35,17 +35,19 @@ class CreateRecipeView(LoginRequiredMixin, View):
             recipe.save()
             if tags:
                 for tag in tags:
-                    tg, created = Tags.objects.get_or_create(name=tag, user=request.user)
+                    tg, created = Tags.objects.get_or_create(
+                        name=tag, user=request.user)
                     recipe.tags.add(tg)
-                
+
             if ingredients:
                 for ingredient in ingredients:
-                    ing, created = Ingredients.objects.get_or_create(name=ingredient, user=request.user)
+                    ing, created = Ingredients.objects.get_or_create(
+                        name=ingredient, user=request.user)
                     recipe.ingredients.add(ing)
             recipe.save()
             return redirect('core:detail', recipe.id)
         return redirect('core:create-recipe')
-            
+
 
 class RecipeDetailView(DetailView):
     model = Recipe
@@ -59,30 +61,20 @@ class RecipeUpdateView(LoginRequiredMixin, OwnerOnlyMixin, UpdateView):
 
 class RecipeDeleteView(LoginRequiredMixin, OwnerOnlyMixin, DeleteView):
     model = Recipe
-        
-   
+
+
 class RecipeListView(View):
     def get(self, request, *args, **kwargs):
         queryset = Recipe.objects.all()
-        random_obj = random.choices(queryset)[0]
+        if queryset:
+            random_obj = random.choices(queryset)[0]
 
-        query = request.GET.get('search')
-        if query:
-            queryset = queryset.filter(
-                Q(tags__name__icontains=query) | Q(ingredients__name__icontains=query) | Q(title__icontains=query)
+            query = request.GET.get('search')
+            if query:
+                queryset = queryset.filter(
+                    Q(tags__name__icontains=query) | Q(ingredients__name__icontains=query) | Q(title__icontains=query)
                 ).distinct()
-        return render(request, 'core/recipe_list.html', {'queryset': queryset, 'random_obj': random_obj})
-    
-
-
-
-
-
-
-
-
-    
-
-
-
+            return render(request, 'core/recipe_list.html', {'queryset': queryset, 'random_obj': random_obj})
+        else:
+            return HttpResponse('No Items Found', status=404)
 
