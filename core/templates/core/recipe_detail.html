@@ -10,6 +10,7 @@
             <h2>{{object.title | capfirst}}</h2>
             <hr>
             <h5>Ingredients</h5>
+            <a href="{% url 'core:add-ingredients' object.id %}" class="btn">Add</a>
             <ul>
                 {% for ingredient in object.ingredients.all %}
                 <li>{{ingredient}}</li>

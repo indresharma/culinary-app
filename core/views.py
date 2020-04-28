@@ -84,5 +84,21 @@ class RecipeListView(View):
             return HttpResponse('No Items Found', status=404)
 
 
-        
+class UpdateIngredient():
+    pass
+
+def update_ingredients(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk)
+    if request.method == 'POST':
+        ingredients = request.POST.getlist('ingredient')
+        for ingredient in ingredients:
+            try: 
+                ing = Ingredients.objects.get(name=ingredient)
+            except ObjectDoesNotExist:
+                ing = Ingredients.objects.create(name=ingredient, user=request.user)
+            recipe.ingredients.add(ing)
+            recipe.save()
+        return redirect('core:detail', pk=pk)
+    return render(request, 'core/add.html')
+
     

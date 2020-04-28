@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+
+{% block body %}
+
+<div class="container mt-3 mb-3">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <label for="recipe-ingredient">Ingredients</label>
+                <div class="form-group form-inline ingredient-wrap">
+                    <div>
+                        <input type="text" class="form-control mr-3 mb-3" name="ingredient" id="recipe-ingredient">
+                    </div>
+                    <button type="submit" class="btn btn-primary add-ingredient mb-3" id="add-ingredients">Add
+                        Ingredients</button>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+{% endblock%}
