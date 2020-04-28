@@ -130,5 +130,11 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 AUTH_USER_MODEL = 'user.UserModel'
 
-LOGIN_URL = '/login/'
+LOGIN_URL = 'user:login'
 LOGIN_REDIRECT_URL = 'core:recipes'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = os.environ.get('TEST_EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('TEST_EMAIL_PWD')
+EMAIL_PORT = 587
