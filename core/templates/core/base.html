@@ -28,7 +28,7 @@
         e.preventDefault();
         if (x < max_fields) {
           x++;
-          $(tag_wrapper).append('<div><input type="text" class="form-control" name="tag"><a href="#" class="remove-tag">X</a></div>')
+          $(tag_wrapper).append('<div class="form-inline"><input type="text" class="form-control mr-3 mb-3" name="tag"><a href="#" class="remove-tag mb-3">Remove</a></div>')
         }
       });
       $(tag_wrapper).on("click", ".remove-tag", function (e) {
@@ -41,7 +41,7 @@
         e.preventDefault();
         if (x < max_fields) {
           x++;
-          $(ingredient_wrapper).append('<div><input type="text" class="form-control" name="ingredient"><a href="#" class="remove-ingredient">X</a></div>')
+          $(ingredient_wrapper).append('<div class="form-inline"><input type="text" class="form-control mr-3 mb-3" name="ingredient"><a href="#" class="remove-ingredient mb-3">Remove</a></div>')
         }
       });
       
@@ -52,6 +52,10 @@
       });
     });
   </script>
+
+<script>
+  $('#exampleModal').modal(options)
+</script>
 </head>
 
 <body style="background-color: #ececec;">

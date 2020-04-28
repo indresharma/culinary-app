@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.conf import settings
 from django.urls import reverse
 from core.models import Recipe
+from django.urls import reverse
 
 class UserManager(BaseUserManager):
     
@@ -60,3 +61,6 @@ class Profile(models.Model):
     def get_recipes(self):
         recipes = Recipe.objects.filter(user=self.user)
         return recipes
+
+    def get_absolute_url(self):
+        return reverse('user:profile', args=[self.pk])

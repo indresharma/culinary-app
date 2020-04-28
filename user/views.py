@@ -79,5 +79,5 @@ class ProfileView(LoginRequiredMixin, View):
 class UpdateProfile(LoginRequiredMixin, OwnerOnlyMixin, UpdateView):
     model = Profile
     fields = ('first_name', 'last_name', 'image', 'about_me', 'location')
-    success_url = 'profile'
+
 

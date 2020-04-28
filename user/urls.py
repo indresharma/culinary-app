@@ -14,4 +14,4 @@ urlpatterns = [
     path('update-profile/<int:pk>/', user_views.UpdateProfile.as_view(), name='update-profile'),
     path('activate/<uidb64>/<token>', user_views.activate_account, name='activate'),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

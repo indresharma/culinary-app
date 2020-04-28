@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 
 from core.models import Ingredients, Tags, Recipe
 from core.forms import RecipeForm
@@ -35,14 +36,18 @@ class CreateRecipeView(LoginRequiredMixin, View):
             recipe.save()
             if tags:
                 for tag in tags:
-                    tg, created = Tags.objects.get_or_create(
-                        name=tag, user=request.user)
+                    try: 
+                        tg = Tags.objects.get(name=tag)
+                    except ObjectDoesNotExist:
+                        tg = Tags.objects.create(name=tag, user=request.user)
                     recipe.tags.add(tg)
 
             if ingredients:
                 for ingredient in ingredients:
-                    ing, created = Ingredients.objects.get_or_create(
-                        name=ingredient, user=request.user)
+                    try: 
+                        ing = Ingredients.objects.get(name=ingredient)
+                    except ObjectDoesNotExist:
+                        ing = Ingredients.objects.create(name=ingredient, user=request.user)
                     recipe.ingredients.add(ing)
             recipe.save()
             return redirect('core:detail', recipe.id)
@@ -78,3 +83,6 @@ class RecipeListView(View):
         else:
             return HttpResponse('No Items Found', status=404)
 
+
+        
+    
