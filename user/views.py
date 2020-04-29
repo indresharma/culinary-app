@@ -63,10 +63,10 @@ def activate_account(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        messages.success('Your account has been activated successfully')
+        messages.success(request, 'Your account has been activated successfully')
         return redirect('core:recipes')
     else:
-        messages.error('Activation link is invalid!')
+        messages.error(request, 'Activation link is invalid!')
         return redirect('user:register')
 
 
