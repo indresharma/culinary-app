@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'iboa^mqqsd131k#@=4c@f(=a9a75@kri-+gmlx-v0hkb6)pkfn'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,15 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'core',
+    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
-    'user',
-
     'crispy_forms',
 ]
 
@@ -128,9 +127,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-AUTH_USER_MODEL = 'user.UserModel'
+AUTH_USER_MODEL = 'users.UserModel'
 
-LOGIN_URL = 'user:login'
+LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'core:recipes'
 
 EMAIL_USE_TLS = True
@@ -138,3 +137,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.environ.get('TEST_EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('TEST_EMAIL_PWD')
 EMAIL_PORT = 587
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

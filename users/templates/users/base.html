@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LemonGrass</title>
+    <!-- bootstrap  -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+    <!-- fontawesome -->
+    <script src="https://kit.fontawesome.com/14f2072043.js" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+            var max_fields = 20;
+            var tag_wrapper = $(".tag-wrap");
+            var ingredient_wrapper = $(".ingredient-wrap");
+            var add_tag = $(".add-tag");
+            var add_ingredient = $(".add-ingredient");
+
+            var x = 1;
+            $(add_tag).click(function (e) {
+                e.preventDefault();
+                if (x < max_fields) {
+                    x++;
+                    $(tag_wrapper).append('<div class="form-inline"><input type="text" class="form-control mr-3 mb-3" name="tag"><a href="#" class="remove-tag mb-3">Remove</a></div>')
+                }
+            });
+            $(tag_wrapper).on("click", ".remove-tag", function (e) {
+                e.preventDefault();
+                $(this).parent('div').remove();
+                x--;
+            });
+
+            $(add_ingredient).click(function (e) {
+                e.preventDefault();
+                if (x < max_fields) {
+                    x++;
+                    $(ingredient_wrapper).append('<div class="form-inline"><input type="text" class="form-control mr-3 mb-3" name="ingredient"><a href="#" class="remove-ingredient mb-3">Remove</a></div>')
+                }
+            });
+
+            $(ingredient_wrapper).on("click", ".remove-ingredient", function (e) {
+                e.preventDefault();
+                $(this).parent('div').remove();
+                x--;
+            });
+        });
+    </script>
+
+</head>
+
+<body style="background-color: #ececec;">
+    <!-- navbar -->
+
+
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-info">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'core:recipes' %}">LemonGrass</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-lemongrass"
+                aria-controls="navbar-lemongrass" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbar-lemongrass">
+
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item active">
+                        <a class="nav-item nav-link" href="{% url 'core:create-recipe' %}" class="btn btn-simple">Add
+                            Post</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">Hello {{user.profile.first_name}}</a>
+                        <div class="dropdown-menu" aria-labelledby="profileDropdown">
+                            <a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a>
+                            <a class="dropdown-item" href="{% url 'users:password_change' %}">Change Password</a>
+                            <a class="dropdown-item" href="#">My Wishlist</a>
+                        </div>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'users:logout' %}">Another Link</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'users:login' %}">Login</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'users:register' %}">Sign Up</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- messages -->
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-info">
+            {{message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- body block -->
+    {% block body %}{% endblock %}
+    
+    <!-- footer -->
+    <footer class="footer my-5 pt-5">
+        <div class="container">
+          <p class="text-center">&copy; {% now "Y" %} LemonGrass</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

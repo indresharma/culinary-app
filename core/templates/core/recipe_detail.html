@@ -1,4 +1,4 @@
-{% extends 'core/base.html' %}
+{% extends 'users/base.html' %}
 {% block body %}
 <div class="container">
     <div class="row">
@@ -7,23 +7,42 @@
         </div>
 
         <div class="col-md-7 mt-3">
-            <h2>{{object.title | capfirst}}</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>{{object.title | capfirst}}</h2>
+                </div>
+            </div>
             <hr>
-            <h5>Ingredients</h5>
-            <a href="{% url 'core:add-ingredients' object.id %}" class="btn">Add</a>
-            <ul>
-                {% for ingredient in object.ingredients.all %}
-                <li>{{ingredient}}</li>
-                {% endfor %}
-            </ul>
-            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Ingredients</h5> 
+                </div>
+                <div class="col-md-6">
+                    {% if object.user == request.user %}
+                    <a href="{% url 'core:add-ingredients' object.id %}" class="btn float-right"><i class="fas fa-pen"></i></a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <ul>
+                        {% for ingredient in object.ingredients.all %}
+                        <li>{{ingredient|capfirst}}</li>
+                        {% endfor %}
+                    </ul> 
+                </div>
+            </div>     
+        </div>
+    </div>
+    <hr>
+    <div class="row mt-3">
+        <div class="col-md-12">
             <h5>Recipe</h5>
             <p>{{object.description| capfirst}}</p>
             {% if object.user == request.user %}
             <a href="{% url 'core:update-recipe' object.id %}" class="btn btn-outline-info">Update</a>
             <a href="{% url 'core:delete-recipe' object.id %}" class="btn btn-outline-danger">Delete</a>
             {% endif %}
-
         </div>
     </div>
 </div>

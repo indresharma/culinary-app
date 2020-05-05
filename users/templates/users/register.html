@@ -4,14 +4,19 @@
 
 <div class="container">
     <div class="row mt-4 mb-4">
-        <div class="col-md-4 offset-md-4">
+        <div class="col-md-6 offset-md-3">
             <div class="card shadow mt-4 bg-white rounded">
+                <div class="card-header bg-info text-white">
+                    <div class="card-title">
+                        SignUp
+                    </div>
+                </div>
                 <div class="card-body">
-                    <h4>Are you sure you want to delete {{obj.title}}</h4>
                     <form method="POST">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-danger">Delete</button>
-                    </form>    
+                        {{ form | crispy }}
+                        <button type="submit" class="btn btn-info float-right">Sign Up</button>
+                    </form>
                 </div>
             </div>
         </div>
