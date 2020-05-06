@@ -64,8 +64,6 @@
 <body style="background-color: #ececec;">
     <!-- navbar -->
 
-
-
     <nav class="navbar navbar-expand-md navbar-dark bg-info">
         <div class="container">
             <a class="navbar-brand" href="{% url 'core:recipes' %}">LemonGrass</a>
@@ -92,7 +90,7 @@
                         </div>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'users:logout' %}">Another Link</a>
+                        <a class="nav-link" href="{% url 'users:logout' %}">Logout</a>
                     </li>
                     {% else %}
                     <li class="nav-item active">
