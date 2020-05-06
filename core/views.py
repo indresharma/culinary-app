@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
 
 from core.models import Ingredients, Tags, Recipe
 from core.forms import RecipeForm
@@ -83,7 +84,13 @@ class RecipeListView(View):
                 queryset = queryset.filter(
                     Q(tags__name__icontains=query) | Q(ingredients__name__icontains=query) | Q(title__icontains=query)
                 ).distinct()
-            return render(request, 'core/recipe_list.html', {'queryset': queryset, 'random_obj': random_obj})
+            paginator = Paginator(queryset, 5)
+            page_number = request.GET.get('page')
+            queryset = paginator.get_page(page_number)
+            return render(request, 'core/recipe_list.html', {
+                'random_obj': random_obj,
+                'queryset': queryset
+            })
         else:
             return HttpResponse('No Items Found', status=404)
 
