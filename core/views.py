@@ -42,7 +42,6 @@ class CreateRecipeView(LoginRequiredMixin, View):
         form = RecipeForm()
         return render(request, 'core/recipe_form.html', {'form': form})
 
-    @login_required
     def post(self, request, *args, **kwargs):
         form = RecipeForm(request.POST)
         if form.is_valid():
