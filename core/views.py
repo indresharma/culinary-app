@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 
-from .models import Ingredients, Tags, Recipe, RecipeCollection
+from .models import Ingredients, Tags, Recipe, RecipeCollection, Comments
 from .forms import RecipeForm
 from users.views import OwnerOnlyMixin
 
@@ -42,6 +42,7 @@ class CreateRecipeView(LoginRequiredMixin, View):
         form = RecipeForm()
         return render(request, 'core/recipe_form.html', {'form': form})
 
+    @login_required
     def post(self, request, *args, **kwargs):
         form = RecipeForm(request.POST)
         if form.is_valid():
@@ -60,8 +61,21 @@ class CreateRecipeView(LoginRequiredMixin, View):
         return redirect('core:create-recipe')
 
 
-class RecipeDetailView(DetailView):
-    model = Recipe
+class RecipeDetailView(View):
+    def get(self, request, *args, **kwargs):
+        recipe = Recipe.objects.get(pk=self.kwargs.get('pk'))
+        return render(request, 'core/recipe_detail.html', {'object': recipe})
+
+    def post(self, request, *args, **kwargs):
+        print(request)
+        recipe = Recipe.objects.get(pk=self.kwargs.get('pk'))
+        comment_input = request.POST.get('comment-input')
+        print(comment_input)
+        if comment_input:
+            comment = Comments.objects.create(comment=comment_input, user=self.request.user, recipe=recipe)
+            comment.save()
+        return redirect('core:detail', recipe.id)
+
 
 
 class RecipeUpdateView(LoginRequiredMixin, OwnerOnlyMixin, UpdateView):
@@ -139,6 +153,18 @@ class RecipeCollectionListView(LoginRequiredMixin, ListView):
         return queryset
 
     
+class AddComment(LoginRequiredMixin, CreateView):
+    model = Comments
+    fields = ('comment',)
+
+    def form_valid(self, form, **kwargs):
+        comment = form.save(commit=False)
+        comment.user = self.request.user
+        comment.recipe = self.kwargs.get('recipe')
+        comment.save()
+        return super().form_valid(form, **kwargs)
+
+
 
 
     

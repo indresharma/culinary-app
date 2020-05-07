@@ -48,6 +48,11 @@ class Recipe(models.Model):
         else:
             return '/media/pictures/mypic.jpg'
 
+    @property
+    def comments(self):
+        qs = Comments.objects.filter(recipe=self).order_by('-created')
+        return qs
+
 
 class RecipeCollection(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -55,3 +60,13 @@ class RecipeCollection(models.Model):
 
     def __str__(self):
         return self.user.profile.first_name
+
+
+class Comments(models.Model):
+    comment = models.CharField(max_length=255)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.comment

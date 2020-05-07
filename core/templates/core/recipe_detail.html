@@ -52,6 +52,33 @@
                 My Collections</button>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12 mt-3 mb-3">
+            <h5>Post Comment</h5>
+            <form method="POST">{% csrf_token %}
+                <textarea class="form-control mb-3" id="comment-form" name="comment-input" rows="3"></textarea>
+                {% if user.is_authenticated %}
+                <button type="submit" class="btn btn-outline-info">Add Comment</button>
+                {% else %}
+                <a href="#" id="login-alert" type="submit" class="btn btn-outline-info">Add Comment</a>
+                {% endif %}
+            </form>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mt-3">
+            <h5>Comments</h5>
+            <div class="comments mt-3">
+                {% for comment in object.comments %}
+                <div class="">
+                    <h6>{{comment.user.profile.first_name}}<small> commented at {{comment.created | date:'d M Y'}}</small></h6>
+                    <p>&emsp;{{comment | capfirst}}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock body %}
 
@@ -68,6 +95,10 @@
                 },
             });
         });
+
+        $('#login-alert').click(function() {
+            alert('You must be logged-in to use this feature')
+        })
     });
 
 </script>
