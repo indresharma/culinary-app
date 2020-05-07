@@ -5,7 +5,7 @@
         <div class="col-md-5 mt-3">
             <div class="card">
                 <img class="card-img-top" src="{{object.image.url}}">
-            </div> 
+            </div>
         </div>
 
         <div class="col-md-7 mt-3">
@@ -17,11 +17,12 @@
             <hr>
             <div class="row">
                 <div class="col-md-6">
-                    <h5>Ingredients</h5> 
+                    <h5>Ingredients</h5>
                 </div>
                 <div class="col-md-6">
                     {% if object.user == request.user %}
-                    <a href="{% url 'core:add-ingredients' object.id %}" class="btn float-right"><i class="fas fa-pen"></i></a>
+                    <a href="{% url 'core:add-ingredients' object.id %}" class="btn float-right"><i
+                            class="fas fa-pen"></i></a>
                     {% endif %}
                 </div>
             </div>
@@ -31,9 +32,9 @@
                         {% for ingredient in object.ingredients.all %}
                         <li>{{ingredient|capfirst}}</li>
                         {% endfor %}
-                    </ul> 
+                    </ul>
                 </div>
-            </div>     
+            </div>
         </div>
     </div>
     <hr>
@@ -44,8 +45,31 @@
             {% if object.user == request.user %}
             <a href="{% url 'core:update-recipe' object.id %}" class="btn btn-outline-info">Update</a>
             <a href="{% url 'core:delete-recipe' object.id %}" class="btn btn-outline-danger">Delete</a>
+
             {% endif %}
+
+            <button type="submit" id="add-to-collections" class="btn btn-outline-warning">Add to
+                My Collections</button>
         </div>
     </div>
 </div>
+{% endblock body %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#add-to-collections').click(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: "{% url 'core:add-to-collections' object.id %}",
+                success: function () {
+                    alert('Recipe added to your collections!')
+                },
+            });
+        });
+    });
+
+</script>
+
 {% endblock %}

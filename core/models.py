@@ -47,3 +47,11 @@ class Recipe(models.Model):
             return self.image.url
         else:
             return '/media/pictures/mypic.jpg'
+
+
+class RecipeCollection(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    recipe = models.ManyToManyField(Recipe)
+
+    def __str__(self):
+        return self.user.profile.first_name

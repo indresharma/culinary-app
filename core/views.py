@@ -9,8 +9,8 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 
-from core.models import Ingredients, Tags, Recipe
-from core.forms import RecipeForm
+from .models import Ingredients, Tags, Recipe, RecipeCollection
+from .forms import RecipeForm
 from users.views import OwnerOnlyMixin
 
 def add_ingredient_to_recipe(user, recipe, ingredient_list):
@@ -105,6 +105,27 @@ class UpdateIngredient(LoginRequiredMixin, View):
             ingredient_list = request.POST.getlist('ingredient')
             add_ingredient_to_recipe(request.user, recipe, ingredient_list)
         return redirect('core:detail', pk=recipe.pk)
+
+
+class RecipeCollectionsView(View):
+    def get(self, request, *args, **kwargs):
+        my_collections, created = RecipeCollection.objects.get_or_create(user=self.request.user)
+        recipe = Recipe.objects.get(pk=self.kwargs['pk'])
+        my_collections.recipe.add(recipe)
+        return HttpResponse('')
+
+
+class RecipeCollectionListView(ListView):
+    model = RecipeCollection
+    template_name = 'core/recipecollection_list.html'
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super(RecipeCollectionListView, self).get_queryset().filter(user=self.request.user)
+        queryset = [x for x in queryset[0].recipe.all()]
+        return queryset
+
+    
 
 
     

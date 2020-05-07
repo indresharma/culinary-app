@@ -9,8 +9,6 @@ class RecipeForm(forms.ModelForm):
         model = Recipe
         fields = ('title', 'description', 'image')
         
-        
-
     def __init__(self, *args, **kwargs):
         super(RecipeForm, self).__init__(*args, **kwargs)
         self.fields['image'].required = False
