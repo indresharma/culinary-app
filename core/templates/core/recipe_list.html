@@ -27,7 +27,7 @@
                         class="card-img-top" alt="..."></a>
                 <div class="card-body">
                     <h5 class="card-title">{{random_obj.title }}</h5>
-                    <p class="card-text">{{random_obj.get_summary | capfirst}}</p>
+                    <p class="card-text">{{random_obj.get_summary | safe | capfirst}}</p>
                 </div>
             </div>
         </div>

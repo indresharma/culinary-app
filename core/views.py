@@ -97,17 +97,29 @@ class RecipeListView(View):
 
 class UpdateIngredient(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'core/add.html')
+        recipe = get_object_or_404(Recipe, pk=kwargs['pk'])
+        return render(request, 'core/update.html', {'recipe': recipe})
 
     def post(self, request, *args, **kwargs):
         recipe = get_object_or_404(Recipe, pk=kwargs['pk'])
         if recipe.user==self.request.user:
             ingredient_list = request.POST.getlist('ingredient')
             add_ingredient_to_recipe(request.user, recipe, ingredient_list)
-        return redirect('core:detail', pk=recipe.pk)
+            return redirect('core:detail', recipe.id)
 
 
-class RecipeCollectionsView(View):
+class RemoveIngredient(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        recipe = get_object_or_404(Recipe, pk=kwargs.get('recipe'))
+        if recipe.user==self.request.user:
+            recipe.ingredients.remove(kwargs.get('ingredient'))
+            recipe.save()
+            return redirect(request.META['HTTP_REFERER'])
+        return redirect('core:recipes')
+        
+            
+class AddToRecipeCollectionsView(View):
+    """Add a recipe to User's RecipeCollections"""
     def get(self, request, *args, **kwargs):
         my_collections, created = RecipeCollection.objects.get_or_create(user=self.request.user)
         recipe = Recipe.objects.get(pk=self.kwargs['pk'])
@@ -115,7 +127,8 @@ class RecipeCollectionsView(View):
         return HttpResponse('')
 
 
-class RecipeCollectionListView(ListView):
+class RecipeCollectionListView(LoginRequiredMixin, ListView):
+    """Shows the Users Recipe Collection"""
     model = RecipeCollection
     template_name = 'core/recipecollection_list.html'
     paginate_by = 5
