@@ -43,7 +43,7 @@ class CreateRecipeView(LoginRequiredMixin, View):
         return render(request, 'core/recipe_form.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = RecipeForm(request.POST)
+        form = RecipeForm(request.POST, request.FILES)
         if form.is_valid():
             tag_list = request.POST.getlist('tag')
             ingredient_list = request.POST.getlist('ingredient')
