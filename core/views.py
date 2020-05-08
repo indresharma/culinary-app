@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
+from django.urls import reverse_lazy
 
 from .models import Ingredients, Tags, Recipe, RecipeCollection, Comments
 from .forms import RecipeForm
@@ -66,10 +67,8 @@ class RecipeDetailView(View):
         return render(request, 'core/recipe_detail.html', {'object': recipe})
 
     def post(self, request, *args, **kwargs):
-        print(request)
         recipe = Recipe.objects.get(pk=self.kwargs.get('pk'))
         comment_input = request.POST.get('comment-input')
-        print(comment_input)
         if comment_input:
             comment = Comments.objects.create(comment=comment_input, user=self.request.user, recipe=recipe)
             comment.save()
@@ -164,6 +163,14 @@ class AddComment(LoginRequiredMixin, CreateView):
         return super().form_valid(form, **kwargs)
 
 
+class RemoveComment(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        comment = Comments.objects.get(pk=self.kwargs.get('pk'))
+        if comment.user == self.request.user:
+            comment.delete()
+        return HttpResponse('success', status=200)
+    
+    
 
 
     
