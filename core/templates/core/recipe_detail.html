@@ -6,12 +6,35 @@
             <div class="card">
                 <img class="card-img-top" src="{{object.image.url}}">
             </div>
+            <div>
+                {% if user.is_authenticated %}
+                <button type="submit" id="add-to-collections" class="btn btn-outline-info mt-3">Add to
+                    My Collections</button>
+                {%else%}
+                <button id="login-alert" type="submit" class="btn btn-outline-info mt-3">Add to
+                    My Collections</button>
+                {% endif %}
+            </div>
         </div>
 
         <div class="col-md-7 mt-3">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <h2>{{object.title | capfirst}}</h2>
+                </div>
+                <div class="col-md-6">
+                    {% if object.user == request.user %}
+                    <div class="dropdown">
+                        <a class="btn dropdown-toggle float-right" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a href="{% url 'core:update-recipe' object.id %}" class="dropdown-item">Update</a>
+                            <a href="{% url 'core:delete-recipe' object.id %}" class="dropdown-item">Delete</a>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             <hr>
@@ -42,18 +65,12 @@
         <div class="col-md-12">
             <h5>Recipe</h5>
             <p>{{object.description| safe | capfirst}}</p>
-            {% if object.user == request.user %}
-            <a href="{% url 'core:update-recipe' object.id %}" class="btn btn-outline-info">Update</a>
-            <a href="{% url 'core:delete-recipe' object.id %}" class="btn btn-outline-danger">Delete</a>
-
-            {% endif %}
-
-            <button type="submit" id="add-to-collections" class="btn btn-outline-warning">Add to
-                My Collections</button>
+            <hr/>
         </div>
+        
     </div>
     <div class="row">
-        <div class="col-md-12 mt-3 mb-3">
+        <div class="col-md-12 mb-3">
             <h5>Post Comment</h5>
             <form method="POST">{% csrf_token %}
                 <textarea class="form-control mb-3" id="comment-form" name="comment-input" rows="3"></textarea>
@@ -72,17 +89,18 @@
             {% for comment in object.comments %}
             <div class="row mt-3">
                 <div class="col-md-1 col-xs-2">
-                    <img class="img-fluid" src="{{comment.user.profile.image.url}}"/>
+                    <img class="img-fluid" src="{{comment.user.profile.image.url}}" />
                 </div>
                 <div class="col-md-11 col-xs-8">
                     <div class="">
-                        <h6>{{comment.user.profile.first_name}} <small text-muted> {{comment.created | date:'d M Y'}}</small></h6>
+                        <h6>{{comment.user.profile.first_name}} <small text-muted>
+                                {{comment.created | date:'d M Y'}}</small></h6>
                         <p>{{comment | capfirst}}</p>
                         {% if comment.user == request.user %}
                         <form class="delete-comment" method="POST">
                             {% csrf_token %}
-                            <button type="submit" value="{{comment.id}}" class="delete-btn btn">Delete</button>
-                         </form>
+                            <a href="#" value="{{comment.id}}" class="delete-btn">Delete</a>
+                        </form>
                         {% endif %}
                     </div>
                 </div>
@@ -98,11 +116,13 @@
     $(document).ready(function () {
         $('#add-to-collections').on('click', function (e) {
             e.preventDefault();
+            var btnText = $('button').text();
 
             $.ajax({
                 url: "{% url 'core:add-to-collections' object.id %}",
                 success: function () {
-                    alert('Recipe added to your collections!')
+                    alert('Recipe added to your collections!');
+
                 },
             });
         });
@@ -111,18 +131,18 @@
             alert('You must be logged-in to use this feature')
         });
 
-        $('.delete-btn').on('click', function(e) {
+        $('.delete-btn').on('click', function (e) {
             e.preventDefault();
             let confirmation = confirm('Are you sure you want to delete this comment?');
             if (confirmation) {
                 var pk = $(this).attr('value');
                 $.ajax({
                     type: 'POST',
-                    url: '/remove-comment/'+pk+'/',
+                    url: '/remove-comment/' + pk + '/',
                     data: {
                         csrfmiddlewaretoken: '{{csrf_token}}',
                     },
-                    success: function() {
+                    success: function () {
                         alert('Comment Removed successfully!')
                         window.location.reload()
                     },

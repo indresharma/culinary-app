@@ -25,6 +25,13 @@ class Ingredients(models.Model):
 
 
 class Recipe(models.Model):
+    UNIT_CHOICES = (
+        ('teaspoon', 'Teaspoon'),
+        ('tablespoon', 'Tablespoon'),
+        ('unit', 'Unit'),
+        ('add_to_taste', 'Add to taste'),
+    )
+
     title = models.CharField(max_length=200)
     data_created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -32,6 +39,14 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(Ingredients, blank=True)
     description = models.TextField()
     image = models.ImageField(upload_to='pictures', default='pictures/mypic.jpg')
+    preparation_time = models.IntegerField(blank=True, null=True)
+    calories = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    paid_recipe = models.BooleanField(default=False)
+    unit = models.CharField(max_length=20, choices=UNIT_CHOICES, default='unit')
+    qty = models.IntegerField(blank=True, null=True)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='likes')
+
+
 
     def __str__(self):
         return self.title

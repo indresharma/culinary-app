@@ -136,7 +136,15 @@ class AddToRecipeCollectionsView(View):
         my_collections, created = RecipeCollection.objects.get_or_create(user=self.request.user)
         recipe = Recipe.objects.get(pk=self.kwargs['pk'])
         my_collections.recipe.add(recipe)
-        return HttpResponse('')
+        return HttpResponse('success', status=200)
+
+class RemoveFromCollectionsView(View):
+    def get(self, request, *args, **kwargs):
+        my_collections = RecipeCollection.objects.get(user=self.request.user)
+        recipe = Recipe.objects.get(pk=kwargs['pk'])
+        my_collections.recipe.remove(recipe)
+        return HttpResponsese('success', status=200)
+
 
 
 class RecipeCollectionListView(LoginRequiredMixin, ListView):
