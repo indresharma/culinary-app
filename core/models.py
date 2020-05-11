@@ -68,6 +68,10 @@ class Recipe(models.Model):
         qs = Comments.objects.filter(recipe=self).order_by('-created')
         return qs
 
+    def likes_count(self):
+        return self.likes.all().count()
+
+    
 
 class RecipeCollection(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

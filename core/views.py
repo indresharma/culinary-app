@@ -1,5 +1,5 @@
 import random
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, TemplateView, View, UpdateView, DeleteView, CreateView
 from django.contrib.auth.decorators import login_required
@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
+from django.template.loader import render_to_string
 
 from .models import Ingredients, Tags, Recipe, RecipeCollection, Comments
 from .forms import RecipeForm
@@ -64,7 +65,10 @@ class CreateRecipeView(LoginRequiredMixin, View):
 class RecipeDetailView(View):
     def get(self, request, *args, **kwargs):
         recipe = Recipe.objects.get(pk=self.kwargs.get('pk'))
-        return render(request, 'core/recipe_detail.html', {'object': recipe})
+        if RecipeCollection.objects.filter(user=self.request.user, recipe=recipe).exists():
+            is_collection = True
+        else: is_collection = False
+        return render(request, 'core/recipe_detail.html', {'object': recipe, 'is_collection': is_collection})
 
     def post(self, request, *args, **kwargs):
         recipe = Recipe.objects.get(pk=self.kwargs.get('pk'))
@@ -129,22 +133,30 @@ class RemoveIngredient(LoginRequiredMixin, View):
             return redirect(request.META['HTTP_REFERER'])
         return redirect('core:recipes')
         
-            
-class AddToRecipeCollectionsView(View):
-    """Add a recipe to User's RecipeCollections"""
-    def get(self, request, *args, **kwargs):
+
+class UpdateCollectionView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        recipe = get_object_or_404(Recipe, id=self.request.POST.get('pk'))
         my_collections, created = RecipeCollection.objects.get_or_create(user=self.request.user)
-        recipe = Recipe.objects.get(pk=self.kwargs['pk'])
-        my_collections.recipe.add(recipe)
-        return HttpResponse('success', status=200)
-
-class RemoveFromCollectionsView(View):
-    def get(self, request, *args, **kwargs):
-        my_collections = RecipeCollection.objects.get(user=self.request.user)
-        recipe = Recipe.objects.get(pk=kwargs['pk'])
-        my_collections.recipe.remove(recipe)
-        return HttpResponsese('success', status=200)
-
+        if recipe in my_collections.recipe.all():
+            my_collections.recipe.remove(recipe)
+            my_collections.save()
+            is_collection = False
+        else:
+            my_collections.recipe.add(recipe)
+            my_collections.save()
+            is_collection = True
+        
+        context = {
+            'object': recipe,
+            'my_collections': my_collections,
+            'is_collection': is_collection,
+        }
+        
+        if request.is_ajax():
+            form = render_to_string('core/_update_collections.html', context, request=request)
+            return JsonResponse({'form': form})
+        
 
 
 class RecipeCollectionListView(LoginRequiredMixin, ListView):
@@ -179,6 +191,24 @@ class RemoveComment(LoginRequiredMixin, View):
         return HttpResponse('success', status=200)
     
     
+def likes(request):
+    recipe = get_object_or_404(Recipe, id=request.POST.get('pk'))
+    if recipe.likes.filter(id=request.user.id).exists():
+        recipe.likes.remove(request.user)
+        recipe.save()
+
+    else:
+        recipe.likes.add(request.user)
+        recipe.save()
+
+    context = {
+        'object': recipe,
+        'likes_count': recipe.likes_count(),
+    }
+
+    if request.is_ajax():
+        form = render_to_string('core/_like_snippet.html', context, request=request)
+        return JsonResponse({'form': form})
 
 
     
