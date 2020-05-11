@@ -65,10 +65,14 @@ class CreateRecipeView(LoginRequiredMixin, View):
 class RecipeDetailView(View):
     def get(self, request, *args, **kwargs):
         recipe = Recipe.objects.get(pk=self.kwargs.get('pk'))
-        if RecipeCollection.objects.filter(user=self.request.user, recipe=recipe).exists():
-            is_collection = True
-        else: is_collection = False
-        return render(request, 'core/recipe_detail.html', {'object': recipe, 'is_collection': is_collection})
+        user = self.request.user
+        if user.is_authenticated:
+            if RecipeCollection.objects.filter(user=self.request.user, recipe=recipe).exists():
+                is_collection = True
+            else: is_collection = False
+            return render(request, 'core/recipe_detail.html', {'object': recipe, 'is_collection': is_collection})
+        return render(request, 'core/recipe_detail.html', {'object': recipe})
+
 
     def post(self, request, *args, **kwargs):
         recipe = Recipe.objects.get(pk=self.kwargs.get('pk'))
@@ -191,24 +195,27 @@ class RemoveComment(LoginRequiredMixin, View):
         return HttpResponse('success', status=200)
     
     
-def likes(request):
-    recipe = get_object_or_404(Recipe, id=request.POST.get('pk'))
-    if recipe.likes.filter(id=request.user.id).exists():
-        recipe.likes.remove(request.user)
-        recipe.save()
+class Likes(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        recipe = get_object_or_404(Recipe, id=self.request.POST.get('pk'))
+        user = self.request.user
+        
+        if recipe.likes.filter(id=user.id).exists():
+            recipe.likes.remove(user)
+            recipe.save()
 
-    else:
-        recipe.likes.add(request.user)
-        recipe.save()
+        else:
+            recipe.likes.add(user)
+            recipe.save()
 
-    context = {
-        'object': recipe,
-        'likes_count': recipe.likes_count(),
-    }
+        context = {
+            'object': recipe,
+            'likes_count': recipe.likes_count(),
+        }
 
-    if request.is_ajax():
-        form = render_to_string('core/_like_snippet.html', context, request=request)
-        return JsonResponse({'form': form})
+        if request.is_ajax():
+            form = render_to_string('core/_like_snippet.html', context, request=request)
+            return JsonResponse({'form': form})
 
 
     

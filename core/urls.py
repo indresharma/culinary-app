@@ -14,7 +14,7 @@ urlpatterns = [
     path('recipe-collection/', views.RecipeCollectionListView.as_view(), name='recipe-collection-list'),
     path('recipe/<int:pk>/add-comment/', views.AddComment.as_view(), name='add-comment'),
     path('remove-comment/<int:pk>/', views.RemoveComment.as_view(), name='remove-comment'),
-    path('likes/', views.likes, name='likes'),
+    path('likes/', views.Likes.as_view(), name='likes'),
     path('update-collections', views.UpdateCollectionView.as_view(), name='update-collections'),
     
 ]
