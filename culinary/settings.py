@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'django_summernote',
+    'rest_framework',
 ]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 SUMMERNOTE_THEME = 'bs4'
@@ -151,6 +152,12 @@ SUMMERNOTE_CONFIG = {
             ['table', ['table']],
             ['view', ['fullscreen', 'codeview', 'help']],
         ],
+}
+
+# rest_framework configurations
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }
 
 try:

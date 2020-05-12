@@ -83,7 +83,6 @@ class RecipeDetailView(View):
         return redirect('core:detail', recipe.id)
 
 
-
 class RecipeUpdateView(LoginRequiredMixin, OwnerOnlyMixin, UpdateView):
     model = Recipe
     form_class = RecipeForm
@@ -161,7 +160,6 @@ class UpdateCollectionView(LoginRequiredMixin, View):
             form = render_to_string('core/_update_collections.html', context, request=request)
             return JsonResponse({'form': form})
         
-
 
 class RecipeCollectionListView(LoginRequiredMixin, ListView):
     """Shows the Users Recipe Collection"""

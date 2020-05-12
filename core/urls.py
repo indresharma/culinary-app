@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from core import views
 
 app_name = 'core'
@@ -15,6 +15,8 @@ urlpatterns = [
     path('recipe/<int:pk>/add-comment/', views.AddComment.as_view(), name='add-comment'),
     path('remove-comment/<int:pk>/', views.RemoveComment.as_view(), name='remove-comment'),
     path('likes/', views.Likes.as_view(), name='likes'),
-    path('update-collections', views.UpdateCollectionView.as_view(), name='update-collections'),
+    path('update-collections/', views.UpdateCollectionView.as_view(), name='update-collections'),
+
+    path('api/', include('core.api.urls')),
     
 ]
