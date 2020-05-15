@@ -24,9 +24,6 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id', 'user', 'created', 'recipe')
 
-    # def create(self, validated_data):
-
-
 
 class RecipeSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(
@@ -63,12 +60,14 @@ class RecipeDetailSerializer(RecipeSerializer):
     tags = TagSerializer(many=True, read_only=True)
     ingredients = IngredientSerializer(many=True, read_only=True)
     comments = CommentSerializer(many=True)
-    # comments = serializers.SerializerMethodField()
 
-    # def get_comments(self, obj):
-    #     return [str(comment) for comment in obj.comments]
+class RecipeImageSerialzer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = ('id', 'image')
+        read_only_fields = ('id',)
 
-
+        
 class WishlistSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecipeCollection

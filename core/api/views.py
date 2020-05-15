@@ -4,20 +4,22 @@ from rest_framework import status
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.authentication import SessionAuthentication
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 
 
 from .serializers import (
-    TagSerializer, 
-    IngredientSerializer, 
-    RecipeSerializer, 
-    RecipeDetailSerializer, 
+    TagSerializer,
+    IngredientSerializer,
+    RecipeSerializer,
+    RecipeDetailSerializer,
     WishlistSerializer,
     WishlistDetailSerializer,
-    CommentSerializer)
+    CommentSerializer,
+    RecipeImageSerialzer)
 from ..models import Tags, Ingredients, Recipe, RecipeCollection, Comments
 from .permissions import IsOwnerOrReadOnly
 
@@ -62,7 +64,21 @@ class RecipeViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return RecipeDetailSerializer
+        if self.action == 'upload_image':
+            return RecipeImageSerialzer
         return self.serializer_class
+
+    @action(methods=['POST'], detail=True, url_path='upload_image')
+    def upload_image(self, request, pk=None):
+        recipe = self.get_object()
+        serializer = self.get_serializer(recipe, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status = status.HTTP_200_OK
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class WishListView(generics.ListAPIView):
@@ -98,7 +114,8 @@ class WishListToggleView(APIView):
 
     def get(self, request, **kwargs):
         recipe_obj = get_object_or_404(Recipe, pk=self.kwargs.get('pk'))
-        wishlist, created = RecipeCollection.objects.get_or_create(user=self.request.user)
+        wishlist, created = RecipeCollection.objects.get_or_create(
+            user=self.request.user)
         updated = False
         in_wishlist = False
         if recipe_obj in wishlist.recipe.all():
@@ -122,9 +139,8 @@ class CommentsViewSet(ListModelMixin, CreateModelMixin, DestroyModelMixin, Gener
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        return self.queryset.filter(recipe=self.kwargs.get('pk'))    
+        return self.queryset.filter(recipe=self.kwargs.get('pk'))
 
-    
 
 class CommentsCreateAPIView(generics.ListCreateAPIView):
     queryset = Comments.objects.all()
@@ -132,7 +148,7 @@ class CommentsCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        return self.queryset.filter(recipe=self.kwargs.get('pk'))  
+        return self.queryset.filter(recipe=self.kwargs.get('pk'))
 
     def perform_create(self, serializer):
         recipe = get_object_or_404(Recipe, pk=self.kwargs.get('pk'))
@@ -146,21 +162,3 @@ class CommentsDestroyAPIView(generics.DestroyAPIView):
     def get_object(self):
         obj = get_object_or_404(Comments, pk=self.kwargs.get('comment_pk'))
         return obj
-
- 
-
-
-
-
-
-    
-
-
-
-    
-            
-        
-
-
-
-    
