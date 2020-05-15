@@ -72,7 +72,6 @@ class Recipe(models.Model):
         return self.likes.all().count()
 
     
-
 class RecipeCollection(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     recipe = models.ManyToManyField(Recipe)

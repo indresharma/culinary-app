@@ -40,6 +40,8 @@ def add_tag_to_recipe(user, recipe, tag_list):
     return recipe
 
 class CreateRecipeView(LoginRequiredMixin, View):
+    """View to create a new recipe"""
+
     def get(self, request, *args, **kwargs):
         form = RecipeForm()
         return render(request, 'core/recipe_form.html', {'form': form})
@@ -52,10 +54,9 @@ class CreateRecipeView(LoginRequiredMixin, View):
             recipe = form.save(commit=False)
             recipe.user = request.user
             recipe.save()
-            # if tags:
+            # add tags to recipe
             add_tag_to_recipe(request.user, recipe, tag_list)
-
-            # if ingredients:
+            # add ingredients to recipe
             add_ingredient_to_recipe(request.user, recipe, ingredient_list)
             recipe.save()
             return redirect('core:detail', recipe.id)
