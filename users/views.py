@@ -13,7 +13,7 @@ from django.http import HttpResponse
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 
-from .forms import RegisterForm
+from .forms import RegisterForm, ProfileForm
 from .models import Profile
 from .tokens import account_activation_token
 
@@ -88,7 +88,8 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 class ProfileUpdate(LoginRequiredMixin, OwnerOnlyMixin, UpdateView):
     """To update the user profile"""
     model = Profile
-    fields = ('first_name', 'last_name', 'image', 'location', 'about_me', 'phone')
+    # fields = ('first_name', 'last_name', 'image', 'location', 'about_me', 'phone')
+    form_class = ProfileForm
     success_url = reverse_lazy('users:profile')
 
 
