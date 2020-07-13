@@ -169,8 +169,11 @@ class RecipeCollectionListView(LoginRequiredMixin, ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        queryset = super(RecipeCollectionListView, self).get_queryset().filter(user=self.request.user)
-        queryset = [x for x in queryset[0].recipe.all()]
+        try:
+            queryset = super(RecipeCollectionListView, self).get_queryset().filter(user=self.request.user)
+            queryset = [x for x in queryset[0].recipe.all()]
+        except IndexError:
+            queryset = []
         return queryset
 
     
