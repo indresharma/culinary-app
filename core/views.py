@@ -11,7 +11,7 @@ from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.template.loader import render_to_string
 
-from .models import Ingredients, Tags, Recipe, RecipeCollection, Comments
+from .models import *
 from .forms import RecipeForm
 from users.views import OwnerOnlyMixin
 
@@ -38,6 +38,16 @@ def add_tag_to_recipe(user, recipe, tag_list):
             recipe.tags.add(tg)
             recipe.save()
     return recipe
+
+class IndexView(View):
+    template_name = 'core/index.html'
+
+    def get(self, request, *args, **kwargs):
+        carousel_obj = CarouselObjects.objects.filter(active=True)
+        context = {'carousel_obj': carousel_obj}
+        return render(request, self.template_name, context=context)
+
+
 
 class CreateRecipeView(LoginRequiredMixin, View):
     """View to create a new recipe"""

@@ -2,6 +2,11 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 
+class CarouselObjects(models.Model):
+    img = models.ImageField(upload_to='pictures')
+    img_text = models.TextField(blank=True, null=True)
+    active = models.BooleanField(default=False)
+
 class Tags(models.Model):
     name = models.CharField(max_length=50)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

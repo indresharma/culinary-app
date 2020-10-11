@@ -1,0 +1,22 @@
+{% extends 'users/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block body %}
+
+{% include 'core/inner-header.html' %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2 col-sm-6 p-3">
+            <div class="card">
+                <img class="card-img-top" src="{% static '/pictures/default_pic_profile.jpg' %}" />
+                <div class="card-footer">
+                    <h5>Some Text</h5>
+                    <p>Price: 500</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}
