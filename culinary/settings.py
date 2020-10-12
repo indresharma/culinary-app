@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_summernote',
     'rest_framework',
+    'products',
 ]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 SUMMERNOTE_THEME = 'bs4'

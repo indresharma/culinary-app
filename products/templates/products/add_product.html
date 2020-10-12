@@ -1,0 +1,13 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        {{form | crispy }}
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+{% endblock body %}
