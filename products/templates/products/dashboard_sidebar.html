@@ -1,0 +1,24 @@
+<aside class="sidenav">
+    <ul class="sidenav-list">
+        <li class="sidenav-list-item">
+            <a href="{% url 'products:dashboard-products-list' %}" class="">Products</a>
+        </li>
+        <li class="sidenav-list-item">
+            <a href="#" class="">Stock</a>
+        </li>
+        <li class="sidenav-list-item">
+            <a href="#" class="">Raw Material</a>
+        </li>
+        <li class="sidenav-list-item">
+            <a href="#" class="">Recipes</a>
+        </li>
+    </ul>
+</aside>
+
+<script>
+    window.onload = function () {
+        var url = "{{request.path}}"
+        console.log($(`a[href='${url}']`))
+        $(`a[href='${url}']`).closest('li .sidenav-list-item').addClass('activeTab')
+    }
+</script>

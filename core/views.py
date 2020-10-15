@@ -14,6 +14,7 @@ from django.template.loader import render_to_string
 from .models import *
 from .forms import RecipeForm
 from users.views import OwnerOnlyMixin
+from products.models import Product
 
 def add_ingredient_to_recipe(user, recipe, ingredient_list):
     """Helper function to add ingredients to recipe"""
@@ -44,7 +45,13 @@ class IndexView(View):
 
     def get(self, request, *args, **kwargs):
         carousel_obj = CarouselObjects.objects.filter(active=True)
-        context = {'carousel_obj': carousel_obj}
+        if Product.objects.all().count() > 12:
+            ids = Product.objects.filter(status=True).values_list('id', flat=True)
+            rand_ids = random.sample(list(ids), 12)
+            item_list = Product.objects.filter(id__in=rand_ids)
+        else: 
+            item_list = Product.objects.all()
+        context = {'carousel_obj': carousel_obj, 'item_list': item_list}
         return render(request, self.template_name, context=context)
 
 
@@ -230,4 +237,6 @@ class Likes(LoginRequiredMixin, View):
             return JsonResponse({'form': form})
 
 
+class ContactView(TemplateView):
+    template_name = 'core/contact.html'
     

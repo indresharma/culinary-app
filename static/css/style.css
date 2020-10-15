@@ -1,27 +1,167 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,600&display=swap');
-body {font-family: 'Open Sans', sans-serif !important; font-size:13px;font-weight:400; background-color: #dfd8d1;
+* {margin: 0; padding: 0;}
+html, body {height: 100%;}
+body {font-family: 'Open Sans', sans-serif !important; font-size:13px;font-weight:400; background-color: #f2eee3;}
+
+#baseDiv {min-height: 100%;}
+
+#mainDiv {
+    overflow: auto;
+    padding-bottom: 210px;
 }
-
-.navbar-secondary, .card-header {background-color: #884809b5;}
-
-a { color: white;}
-.active {background-color: #df7d1b;}
-.car-title {font-size: larger;}
-.carouselImg {height: 350px; overflow: hidden; vertical-align: middle;}
-.carousel-caption h5 {font-family: cursive; font-size: xx-large; font-style: italic;}
-.indexProducts img {width: 100%; height: 100%;}
-.prodFooter {padding-bottom: 0%;}
-.prodFooter h5 {font-size: medium; font-weight: bold;}
-.headingText {font-size: x-large;}
-
-
 .footer {
-    left: 0;
-    bottom: 0;
     width: 100%;
-    background-color: #884809b5;
+    background-color: #785e4d;
     color: white;
     text-align: center;
-    
+    position: relative;
+    height: 210px;
+    margin-top: -210px;
+    clear: both;
 }
+
+@media screen and (max-width: 600px){
+    #mainDiv {
+        padding-bottom: 100vh;
+    }
+    .footer {
+        min-height: 100vh;
+        margin-top: -100vh;
+    }
+}
+
+.navbar-secondary, .card-header {background-color: #785e4d;}
+
+a { color: white;}
+.active {background-color: #ff8426;}
+.car-title {font-size: larger;}
+.carouselImg {height: 50vh; overflow: hidden; vertical-align: middle;}
+.carousel-caption h5 {font-family: cursive; font-size: xx-large; font-style: italic;}
+.indexProducts img {width: 100%; height: 100%;}
+.prodFooter {padding-bottom: 0; height: 100%;}
+.prodFooter h5 {font-size: medium; font-weight: bold;}
+.headingDiv {display: flex; position: relative;}
+.headingText {margin-top: 12px ;font-size: x-large; font-weight: 500; text-transform: uppercase; color: #ff8426}
+.viewAll{position: absolute; right: 0; bottom: 0; color: #ff8426; font-size: medium;}
+.form-control {height: 32px;}
+.inputDiv{padding: 0px 5px;}
+.submitBtnDiv {float: right;}
+.card-title{font-weight: bold;}
+.submitBtn {background-color: #ff8426;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 12px 27px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+.clickable {cursor: pointer;}
+
+.contactForm{padding: 32px;}
+
+.contactForm input,
+.contactForm textarea{
+    margin: 10px 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid #ff8426;
+    padding: 20px;
+    color: white;
+    width: 100%;
+}
+.btn {
+    background: #ff8426;
+    color: white;
+}
+.btn:hover {
+    background: #785e4d;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 15vw;
+    object-fit: cover;
+}
+
+@media only screen and (max-width: 600px) {
+    .card-img-top {
+        width: 100%;
+        height: 55vh;
+        object-fit: cover;
+    }
+  }
+
+.btn-outline-orange{
+    background-color: transparent;
+    border: 2px solid #ff8426;
+    color: #ff8426;
+}
+.btn-outline-orange:hover{background-color: #ff8426;}
+
+
+/* Dashboard CSS */
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+      "sidenav header"
+      "sidenav main"
+      "sidenav footer";
+    height: 90vh;
+}
+
+.sidenav {
+display: flex; /* Will be hidden on mobile */
+flex-direction: column;
+grid-area: sidenav;
+background-color: #baaf92;
+}
+
+.sidenav-list {
+padding: 0;
+list-style-type: none;
+}
+
+.sidenav-list-item {
+padding: 15px 15px 15px 40px;
+color: #FFF;
+}
+
+.sidenav-list-item:hover {
+background-color: rgba(255, 255, 255, 0.2);
+font-weight: bold;
+cursor: pointer;
+}
+
+.sidenav-list-item a:hover{color: inherit; text-decoration: none;}
+
+/* .main {
+grid-area: main;
+background-color: #8fd4d9;
+} */
+
+
+@media screen and (max-width: 600px){
+.grid-container {
+    grid-template-columns: 120px 1fr;
+}
+
+.sidenav-list-item {
+    padding: 15px 15px 15px 20px;
+    color: #FFF;
+    }
+}
+  
+.thead-custom {
+    background-color: rgba(255, 255, 255, 0.575);
+}
+
+.page-link {color: #ff8426;}
+.activeTab {background-color: rgba(255, 255, 255, 0.575); font-weight: bold;}
+  
+

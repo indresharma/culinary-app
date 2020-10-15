@@ -66,25 +66,28 @@
 </head>
 
 <body>
-    {% include 'users/header.html' %}
+    <div id="baseDiv">
+        <div id="mainDiv">
+            {% include 'users/header.html' %}
 
-    <!-- messages -->
-    <div class="container">
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-info">
-            {{message}}
+            <!-- messages -->
+            <div class="container">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-info">
+                    {{message}}
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- body block -->
+            {% block body %}{% endblock %}
+
+            <!-- scripts block -->
+            {% block scripts %}{% endblock %}
         </div>
-        {% endfor %}
-        {% endif %}
     </div>
-
-    <!-- body block -->
-    {% block body %}{% endblock %}
-
-    <!-- scripts block -->
-    {% block scripts %}{% endblock %}
-
     <!-- Footer -->
     <footer class="footer p-3">
 
@@ -161,6 +164,7 @@
         <!-- Copyright -->
 
     </footer>
+    <!-- Footer -->
     <!-- Footer -->
 
     <script>

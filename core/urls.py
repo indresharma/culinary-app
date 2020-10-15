@@ -17,6 +17,8 @@ urlpatterns = [
     path('remove-comment/<int:pk>/', RemoveComment.as_view(), name='remove-comment'),
     path('likes/', Likes.as_view(), name='likes'),
     path('update-collections/', UpdateCollectionView.as_view(), name='update-collections'),
+    path('contact/', ContactView.as_view(), name='contact-us'),
+
 
     path('api/', include('core.api.urls')),
     
