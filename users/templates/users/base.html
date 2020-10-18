@@ -69,17 +69,16 @@
     <div id="baseDiv">
         <div id="mainDiv">
             {% include 'users/header.html' %}
-
             <!-- messages -->
-            <div class="container">
+            <!-- <div class="container">
                 {% if messages %}
                 {% for message in messages %}
-                <div class="alert alert-info">
-                    {{message}}
+                <div class="text-center alert alert-{{ message.tags }}">
+                    {{ message|safe }}
                 </div>
                 {% endfor %}
                 {% endif %}
-            </div>
+            </div> -->
 
             <!-- body block -->
             {% block body %}{% endblock %}
@@ -89,7 +88,7 @@
         </div>
     </div>
     <!-- Footer -->
-    <footer class="footer p-3">
+    <footer class="footer">
 
         <!-- Footer Links -->
         <div class="container text-center text-md-left">
@@ -164,8 +163,6 @@
         <!-- Copyright -->
 
     </footer>
-    <!-- Footer -->
-    <!-- Footer -->
 
     <script>
         window.onload = function () {

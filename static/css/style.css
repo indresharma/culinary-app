@@ -12,6 +12,7 @@ body {font-family: 'Open Sans', sans-serif !important; font-size:13px;font-weigh
 }
 .footer {
     width: 100%;
+    padding-top: 15px;
     background-color: #785e4d;
     color: white;
     text-align: center;
@@ -72,11 +73,11 @@ a { color: white;}
     color: white;
     width: 100%;
 }
-.btn {
+.btnCustom {
     background: #ff8426;
     color: white;
 }
-.btn:hover {
+.btnCustom:hover {
     background: #785e4d;
 }
 
@@ -104,21 +105,7 @@ a { color: white;}
 
 /* Dashboard CSS */
 
-.grid-container {
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    grid-template-rows: 1fr;
-    grid-template-areas:
-      "sidenav header"
-      "sidenav main"
-      "sidenav footer";
-    height: 90vh;
-}
-
 .sidenav {
-display: flex; /* Will be hidden on mobile */
-flex-direction: column;
-grid-area: sidenav;
 background-color: #baaf92;
 }
 
@@ -128,7 +115,6 @@ list-style-type: none;
 }
 
 .sidenav-list-item {
-padding: 15px 15px 15px 40px;
 color: #FFF;
 }
 
@@ -146,7 +132,7 @@ background-color: #8fd4d9;
 } */
 
 
-@media screen and (max-width: 600px){
+/* @media screen and (max-width: 600px){
 .grid-container {
     grid-template-columns: 120px 1fr;
 }
@@ -155,7 +141,7 @@ background-color: #8fd4d9;
     padding: 15px 15px 15px 20px;
     color: #FFF;
     }
-}
+} */
   
 .thead-custom {
     background-color: rgba(255, 255, 255, 0.575);
@@ -163,5 +149,9 @@ background-color: #8fd4d9;
 
 .page-link {color: #ff8426;}
 .activeTab {background-color: rgba(255, 255, 255, 0.575); font-weight: bold;}
+.updateBtn {background: transparent; color: #000; padding: 5px 5px; font-size: 18px;}
+.updateBtn:hover{background-color: rgba(255, 255, 255, 0.575);border-radius: 5px;}
+.deleteBtn {background: transparent; color: #d60202; padding: 5px 5px;font-size: 18px;}
+.deleteBtn:hover{background-color: rgba(255, 255, 255, 0.575); border-radius: 5px;}
   
-
+.dashboardHeading{font-weight: 600; font-size: large; color: #FFF; border-bottom: 1px solid; padding-bottom: 5px;}

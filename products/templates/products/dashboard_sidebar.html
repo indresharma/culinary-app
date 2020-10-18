@@ -1,24 +1,57 @@
-<aside class="sidenav">
-    <ul class="sidenav-list">
-        <li class="sidenav-list-item">
-            <a href="{% url 'products:dashboard-products-list' %}" class="">Products</a>
+<div class="sidebar-sticky">
+    <ul class="nav flex-column">
+        <li class="nav-item sidenav-list-item">
+            <a class="nav-link" href="{% url 'products:dashboard' %}">
+                <span><i class="fa fa-dashboard"></i></span> Dashboard<span class="sr-only">(current)</span>
+            </a>
         </li>
-        <li class="sidenav-list-item">
-            <a href="#" class="">Stock</a>
+        <li class="nav-item sidenav-list-item">
+            <a class="nav-link" href="{% url 'products:dashboard-products-list' %}">
+                <span><i class="fa fa-dropbox"></i></span> Products
+            </a>
         </li>
-        <li class="sidenav-list-item">
-            <a href="#" class="">Raw Material</a>
+        <li class="nav-item sidenav-list-item">
+            <a class="nav-link" href="#">
+                <span><i class="fa fa-bar-chart-o"></i></span> Stock Management
+            </a>
         </li>
-        <li class="sidenav-list-item">
-            <a href="#" class="">Recipes</a>
+        <li class="nav-item sidenav-list-item">
+            <a class="nav-link" href="#">
+                <span><i class="fa fa-clipboard"></i></span> Posts
+            </a>
+        </li>
+        <li class="nav-item sidenav-list-item">
+            <a class="nav-link" href="#">
+                <span><i class="fa fa-users"></i></span> Customers
+            </a>
         </li>
     </ul>
-</aside>
 
-<script>
-    window.onload = function () {
-        var url = "{{request.path}}"
-        console.log($(`a[href='${url}']`))
-        $(`a[href='${url}']`).closest('li .sidenav-list-item').addClass('activeTab')
-    }
-</script>
+    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        <span class="dashboardHeading">Saved Reports</span>
+        <a class="d-flex align-items-center text-muted" href="#">
+        </a>
+    </h6>
+    <ul class="nav flex-column mb-2">
+        <li class="nav-item sidenav-list-item">
+            <a class="nav-link" href="#">
+                Current month
+            </a>
+        </li>
+        <li class="nav-item sidenav-list-item">
+            <a class="nav-link" href="#">
+                Last quarter
+            </a>
+        </li>
+        <li class="nav-item sidenav-list-item">
+            <a class="nav-link" href="#">
+                Social engagement
+            </a>
+        </li>
+        <li class="nav-item sidenav-list-item">
+            <a class="nav-link" href="#">
+                Year-end sale
+            </a>
+        </li>
+    </ul>
+</div>

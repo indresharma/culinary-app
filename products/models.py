@@ -33,8 +33,6 @@ class Product(BaseTracker):
     image = models.ImageField(upload_to='pictures',
                               default='pictures/mypic.jpg')
     weight = models.PositiveSmallIntegerField(blank=True, null=True)
-    height = models.PositiveSmallIntegerField(blank=True, null=True)
-    color = models.CharField(max_length=15, blank=True, null=True)
     best_before = models.PositiveSmallIntegerField(blank=True, null=True)
     base_ingredient = models.CharField(max_length=25, blank=True, null=True)
 
@@ -45,7 +43,7 @@ class Product(BaseTracker):
 
     class Meta:
         permissions = (
-
+            ('access_dashboard', 'Access Dashboard'),
         )
 
     def get_status(self):

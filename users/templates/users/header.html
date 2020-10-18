@@ -30,6 +30,11 @@
 
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
+                {% if perms.products.access_dashboard %}
+                <li class="nav-item">
+                    <a class="nav-item nav-link" href="{% url 'products:dashboard' %}" class="btn btn-simple">Dashboard</a>
+                </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-item nav-link" href="{% url 'core:create-recipe' %}" class="btn btn-simple">Add
                         Post</a>

@@ -3,17 +3,31 @@
 {% load crispy_forms_tags %}
 {% block body %}
 
-<div class="grid-container">
-    {% include 'products/dashboard_sidebar.html'%}
-
-    <main class="main">
-
-
-
-    </main>
+<div class="container-fluid">
+    <div class="row dashboardContainer">
+        <nav class="col-md-2 d-none d-md-block sidebar sidenav">
+            {% include 'products/dashboard_sidebar.html'%}
+        </nav>
+        
+        <main role="main" class="col-md-10 col-lg-10">
+            {% block main %}
+            {% endblock main %}
+        </main>
+        
+    </div>
 </div>
 
 
+{% endblock %}
 
 
-{% endblock%}
+{% block scripts %}
+<script>
+    window.onload = function () {
+        var url = "{{request.path}}"
+        console.log($(`a[href='${url}']`))
+        $(`a[href='${url}']`).closest('li .sidenav-list-item').addClass('activeTab')
+    }
+</script>
+
+{% endblock %}
