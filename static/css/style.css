@@ -45,7 +45,7 @@ a { color: white;}
 .headingDiv {display: flex; position: relative;}
 .headingText {margin-top: 12px ;font-size: x-large; font-weight: 500; text-transform: uppercase; color: #ff8426}
 .viewAll{position: absolute; right: 0; bottom: 0; color: #ff8426; font-size: medium;}
-.form-control {height: 32px;}
+.asteriskField {color: #d60202; padding-left: 2px;}
 .inputDiv{padding: 0px 5px;}
 .submitBtnDiv {float: right;}
 .card-title{font-weight: bold;}
@@ -151,7 +151,7 @@ background-color: #8fd4d9;
 .activeTab {background-color: rgba(255, 255, 255, 0.575); font-weight: bold;}
 .updateBtn {background: transparent; color: #000; padding: 5px 5px; font-size: 18px;}
 .updateBtn:hover{background-color: rgba(255, 255, 255, 0.575);border-radius: 5px;}
-.deleteBtn {background: transparent; color: #d60202; padding: 5px 5px;font-size: 18px;}
-.deleteBtn:hover{background-color: rgba(255, 255, 255, 0.575); border-radius: 5px;}
+.deleteBtn, .stockDeleteBtn {background: transparent; color: #d60202; padding: 5px 5px;font-size: 18px;}
+.deleteBtn:hover, .stockDeleteBtn:hover{background-color: rgba(255, 255, 255, 0.575); border-radius: 5px;}
   
 .dashboardHeading{font-weight: 600; font-size: large; color: #FFF; border-bottom: 1px solid; padding-bottom: 5px;}

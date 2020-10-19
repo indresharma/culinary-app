@@ -5,11 +5,14 @@
 
 
 {% include 'products/dashboard_header.html'%}
-
 <div class="row">
     <div class="col-md-12 pb-3 text-right">
-        <a href="{% url 'products:dashboard-product-add' %}" class="btn btn-outline-secondary btn-sm addStockBtn">
-            <span>+</span>Add Products
+        <!-- Button trigger modal -->
+        <a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm addItemBtn">
+            <span>+</span>Add Item
+        </a>
+        <a href="{% url 'products:dashboard-stock-add' %}" class="btn btn-outline-secondary btn-sm addStockBtn">
+            <span>+</span>Add Stock
         </a>
     </div>
 </div>
@@ -21,37 +24,34 @@
                 <thead class="thead-custom">
                     <tr>
                         <th>S.No.</th>
-                        <th>Name</th>
-                        <th>Weight</th>
-                        <th>Best Before</th>
+                        <th>Item</th>
+                        <th>Quantity</th>
                         <th>Price</th>
-                        <th>Product discount</th>
-                        <th>Quantity Available</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Validity</th>
+                        <th>Supplier</th>
+                        <th>Payment Status</th>
+                        <th style="width:10%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in object_list %}
                     <tr>
                         <th>{{forloop.counter}}</th>
-                        <td>{{item.product}}</td>
-                        <td>{{item.weight}}</td>
-                        <td>{{item.best_before}}</td>
+                        <td>{{item.item}}</td>
+                        <td>{{item.quantity}}</td>
                         <td class="text-right">{{item.price}}</td>
-                        <td>{{item.product_discount}}</td>
-                        <td>{{item.quantity_available}}</td>
-                        <td>{{item.get_status}}</td>
+                        <td>{{item.validity|date:'d M Y'}}</td>
+                        <td>{{item.supplier}}</td>
+                        <td>{{item.payment_status}}</td>
                         <td>
                             <form method="POST">
                                 {% csrf_token %}
-                                <a href="{% url 'products:dashboard-product-update' item.id %}" data-id="{{item.id}}" update="1"
+                                <a href="{% url 'products:dashboard-stock-update' item.id %}" data-id="{{item.id}}" update="1"
                                     class="updateBtn"><i class="fa fa-pencil"></i></a>
 
-                                <a href="javascript:void(0);" data-id="{{item.id}}" product_delete="1" class="deleteBtn"><i
+                                <a href="javascript:void(0);" data-id="{{item.id}}" stock_delete="1" class="deleteBtn"><i
                                         class="fa fa-trash"></i></a>
                             </form>
-
                         </td>
                     </tr>
                     {% empty %}
@@ -103,6 +103,10 @@
 </div>
 
 
+<!-- Modal -->
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">
+
+</div>
 
 
 {% endblock main%}

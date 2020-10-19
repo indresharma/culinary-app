@@ -51,8 +51,6 @@ class Recipe(models.Model):
     qty = models.IntegerField(blank=True, null=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='likes')
 
-
-
     def __str__(self):
         return self.title
 

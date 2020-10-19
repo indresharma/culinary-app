@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth import get_user_model
+from django.db.models import Q, F
 
 User = get_user_model()
 
@@ -29,7 +30,7 @@ class Product(BaseTracker):
     tags = models.ManyToManyField('Tags')
     status = models.BooleanField(default=True, blank=True, null=True)
     product_discount = models.PositiveSmallIntegerField(default=0,
-        validators=[MaxValueValidator(10)], blank=True, null=True)
+                                                        validators=[MaxValueValidator(10)], blank=True, null=True)
     image = models.ImageField(upload_to='pictures',
                               default='pictures/mypic.jpg')
     weight = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -73,9 +74,34 @@ class RawMaterial(BaseTracker):
     def __str__(self):
         return self.item
 
+    def get_unit(self):
+        return self.get_unit_display()
+
 
 class RMStock(BaseTracker):
+    PAYMENT_CHOICES = (
+        ('Done', 'Done'),
+        ('Pending', 'Pending'),
+    )
     item = models.ForeignKey(
         'RawMaterial', on_delete=models.CASCADE, related_name='rm_stock')
     quantity = models.PositiveSmallIntegerField(blank=True, null=True)
+    price = models.DecimalField(
+        max_digits=8, decimal_places=2, blank=True, null=True)
     validity = models.DateField(blank=True, null=True)
+    supplier = models.CharField(max_length=255, blank=True, null=True)
+    payment_status = models.CharField(
+        max_length=10, choices=PAYMENT_CHOICES, blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Raw Material Stock"
+        verbose_name_plural = "Raw Material Stock"
+
+    def __str__(self):
+        return str(self.item)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            RawMaterial.objects.filter(id=self.item_id).update(
+                quantity_available=F('quantity_available') + self.quantity)
+        super().save(*args, **kwargs)

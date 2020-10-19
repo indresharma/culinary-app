@@ -5,11 +5,20 @@ from django.http import JsonResponse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView, View
 from django.views.generic.edit import ModelFormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 
 from .models import *
 from .forms import *
+
+############## Helper Function #######################
+
+@login_required
+def get_unit(request):
+    pk = request.GET.get('pk')
+    unit = RawMaterial.objects.get(id=pk).get_unit()
+    return JsonResponse({'unit': unit})
 
 
 class CustomAuthMixin(LoginRequiredMixin, PermissionRequiredMixin):
@@ -29,7 +38,7 @@ class ProductCreateView(CustomAuthMixin, SuccessMessageMixin, CreateView):
     permission_required = ['products.add_product']
     form_class = ProductForm
     template_name = 'products/add_product.html'
-    success_url = reverse_lazy('products:add-products')
+    success_url = reverse_lazy('products:dashboard-product-add')
     success_message = 'Product added Successfully'
 
 
@@ -59,8 +68,74 @@ class DashboardView(TemplateView):
     template_name = 'products/dashboard.html'
 
 
-class DashboardProductListView(ProductListView):
+class ProductListView(ProductListView):
     template_name = 'products/dashboard_products_list.html'
     paginate_by = 10
 
 
+#################### Stock Views ######################################
+
+class RawMaterialListView(ListView):
+    model = RawMaterial
+    template_name = 'products/dashboard_rm_list.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return RawMaterial.objects.all().order_by('-id')
+  
+
+class RawMaterialCreateView(CustomAuthMixin, SuccessMessageMixin, CreateView):
+    permission_required = ['products.add_rawmaterial']
+    form_class = RawMaterialForm
+    template_name = 'products/dashboard_raw_material_add.html'
+    success_message = 'Item added Successfully'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        context = {'form': form}
+        html = render_to_string(self.template_name, context=context, request=request)
+        return JsonResponse({'html': html})
+    
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.create_by = self.request.user
+        instance.save()
+        messages.success(self.request, self.success_message)
+        return JsonResponse({'status': True})
+
+
+class StockListView(ListView):
+    model = RMStock
+    template_name = 'products/dashboard_stock_list.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return RMStock.objects.all().order_by('-id')
+
+    
+class StockCreateView(CustomAuthMixin, SuccessMessageMixin, CreateView):
+    permission_required = ['products.add_rmstock']
+    form_class = RMStockForm
+    template_name = 'products/dashboard_stock_add.html'
+    success_url = reverse_lazy('products:dashboard-stock-add')
+    success_message = 'Stock added Successfully'
+
+
+class StockUpdateView(CustomAuthMixin, SuccessMessageMixin, UpdateView):
+    permission_required = ['products.change_rmstock']
+    model = RMStock
+    form_class = RMStockUpdateForm
+    template_name = 'products/dashboard_stock_add.html'
+    success_url = reverse_lazy('products:dashboard-stock-list')
+    success_message = 'Stock updated Successfully'
+
+class StockDeleteView(CustomAuthMixin, SuccessMessageMixin, DeleteView):
+    permission_required = ['products.change_product']
+    model = RMStock
+    success_message = 'Stock deleted Successfully'
+
+    def delete(self, request, *args, **kwargs):
+        self.get_object().delete()
+        messages.success(request, self.success_message)
+        payload = {'status': True, 'message': 'Deleted'}
+        return JsonResponse(payload)

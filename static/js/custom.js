@@ -55,15 +55,47 @@ $(function () {
 
 
 $(document).on('click', '.deleteBtn', function () {
-    var pk = $(this).attr('data-id')
-    var form = $(this).closest('form')[0]
-
-    console.log(form)
-
+    var pk = $(this).attr('data-id');
+    var product_delete = $(this).attr('product_delete');
+    var stock_delete = $(this).attr('stock_delete');
+    var form = $(this).closest('form')[0];
+    var url;
+    if (product_delete) {
+        url = `/dashboard/products/delete/${pk}/`
+    } else if (stock_delete){
+        url = `/dashboard/stock/delete/${pk}/`
+    }
+    
 
     $.ajax({
         type: 'POST',
-        url: `/products/delete/${pk}/`,
+        url: url,
+        data: new FormData(form),
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            console.log('Success', res)
+            location.reload();
+        },
+        error: function (res) {
+            console.log('Error', res)
+        }
+    });
+});
+
+$(document).on('click', '.addItemBtn', function(){
+    let url = "/dashboard/raw_material/add/"
+    $.get(url, function (res, status) {
+        $('#itemModal').html(res['html'])
+        $('#itemModal').modal('show')
+    })
+});
+
+$(document).on('click', '#saveItem', function(){
+    var form = $(this).closest('form')[0]
+    $.ajax({
+        type: 'POST',
+        url: `/dashboard/raw_material/add/`,
         data: new FormData(form),
         contentType: false,
         processData: false,
@@ -74,5 +106,12 @@ $(document).on('click', '.deleteBtn', function () {
         error: function () {
             console.log('Error', res)
         }
+    });
+});
+
+$(document).on('change', '#id_item', function(){
+    var pk = $(this).val()
+    $.get('/get_unit/', {'pk': pk}, function(res, status){
+        $('#unitReadOnly').val(res['unit'])
     });
 });
