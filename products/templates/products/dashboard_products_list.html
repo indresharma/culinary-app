@@ -4,10 +4,11 @@
 {% block main %}
 
 
-{% include 'products/dashboard_header.html'%}
+
 
 <div class="row">
-    <div class="col-md-12 pb-3 text-right">
+    <div class="col-md-12 py-3 text-right">
+        <h2 class="float-left">Dashboard</h2>
         <a href="{% url 'products:dashboard-product-add' %}" class="btn btn-outline-secondary btn-sm addStockBtn">
             <span>+</span>Add Products
         </a>

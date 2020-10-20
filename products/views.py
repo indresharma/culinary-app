@@ -65,10 +65,10 @@ class ProductDeleteView(CustomAuthMixin, DeleteView):
 
 #################### Dashboard Views #################################
 class DashboardView(TemplateView):
-    template_name = 'products/dashboard.html'
+    template_name = 'products/dashboard_main.html'
 
 
-class ProductListView(ProductListView):
+class DashboardProductListView(ProductListView):
     template_name = 'products/dashboard_products_list.html'
     paginate_by = 10
 

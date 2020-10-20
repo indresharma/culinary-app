@@ -2,7 +2,12 @@
     <ul class="nav flex-column">
         <li class="nav-item sidenav-list-item">
             <a class="nav-link" href="{% url 'products:dashboard' %}">
-                <span><i class="fa fa-dashboard"></i></span> Dashboard<span class="sr-only">(current)</span>
+                <span><i class="fa fa-bar-chart-o"></i></span> Dashboard<span class="sr-only">(current)</span>
+            </a>
+        </li>
+        <li class="nav-item sidenav-list-item">
+            <a class="nav-link" href="{% url 'sales:billing' %}">
+                <span><i class="fa fa-dollar"></i></span>  Billing
             </a>
         </li>
         <li class="nav-item sidenav-list-item">
@@ -12,7 +17,7 @@
         </li>
         <li class="nav-item sidenav-list-item">
             <a class="nav-link" href="{% url 'products:dashboard-stock-list' %}">
-                <span><i class="fa fa-bar-chart-o"></i></span> Stock Management
+                <span><i class="fa fa-truck"></i></span> Stock Management
             </a>
         </li>
         <li class="nav-item sidenav-list-item">
@@ -35,22 +40,22 @@
     <ul class="nav flex-column mb-2">
         <li class="nav-item sidenav-list-item">
             <a class="nav-link" href="#">
-                Current month
+                <span><i class="fa fa-calendar-o"></i></span> Current month
             </a>
         </li>
         <li class="nav-item sidenav-list-item">
             <a class="nav-link" href="#">
-                Last quarter
+                <span><i class="fa fa-calendar-o"></i></span> Last quarter
             </a>
         </li>
         <li class="nav-item sidenav-list-item">
             <a class="nav-link" href="#">
-                Social engagement
+                <span><i class="fa fa-calendar-o"></i></span> Social engagement
             </a>
         </li>
         <li class="nav-item sidenav-list-item">
             <a class="nav-link" href="#">
-                Year-end sale
+                <span><i class="fa fa-calendar-o"></i></span> Year-end sale
             </a>
         </li>
     </ul>
