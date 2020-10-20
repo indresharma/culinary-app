@@ -15,6 +15,7 @@ class RegisterForm(UserCreationForm):
         super(RegisterForm, self).__init__(*args, **kwargs)
         self.fields['first_name'].required = True
         self.fields['last_name'].required = True
+        self.fields['password1'].help_text = None
 
 
 class ProfileForm(forms.ModelForm):
