@@ -4,45 +4,44 @@
 {% block main %}
 <div class="container py-3">
     <div class="card billingTable">
-        <div class="card-header px-4">
-            <header>
-                <div class="row">
-                    <div class="col">
-                        LOGO
-                    </div>
-                    <div class="col text-right">
-                        <h2 class="name">RS BAKERS</h2>
-                        <div>6/11/348 Korkhana Faizabad</div>
-                        <div>9394887095</div>
-                        <div>indresharma@gmail.com</div>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col">
-                        <h2 class="text-gray-light">INVOICE TO</h2>
-                        <div class="invoice-to form-group">
-                            <input type="text" name="customer" id="customer" class="form-control-sm"
-                                placeholder="Customer Name" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="customer_phone" id="customer_phone" class="form-control-sm"
-                                placeholder="Customer Phone No." />
-                        </div>
-                    </div>
-                    <div class="col text-right">
-                        <h2 class="text-gray-light">ORDER DETAILS</h2>
-                        <div class="invoice-id">Order ID: Will be Generated</div>
-                        <div class="date">Date: {% now 'd M Y'%}</div>
-                    </div>
-                </div>
-            </header>
-        </div>
-
-
         <form method="POST">
             {% csrf_token %}
-            <div class="card-body pt-0">
-                <table class="table table-striped table-responsive">
+            <div class="card-header px-4">
+                <header>
+                    <div class="row">
+                        <div class="col">
+                            LOGO
+                        </div>
+                        <div class="col text-right">
+                            <h2 class="name">RS BAKERS</h2>
+                            <div>6/11/348 Korkhana Faizabad</div>
+                            <div>9394887095</div>
+                            <div>indresharma@gmail.com</div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col">
+                            <h2 class="text-gray-light">INVOICE TO</h2>
+                            <div class="invoice-to form-group">
+                                <input type="text" name="customer" id="customer" class="form-control-sm"
+                                    placeholder="Customer Name" />
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="customer_phone" id="customer_phone" class="form-control-sm"
+                                    placeholder="Customer Phone No." />
+                            </div>
+                        </div>
+                        <div class="col text-right">
+                            <h2 class="text-gray-light">ORDER DETAILS</h2>
+                            <div class="invoice-id">Order ID: Will be Generated</div>
+                            <div class="date">Date: {% now 'd M Y'%}</div>
+                        </div>
+                    </div>
+                </header>
+            </div>
+
+            <div class="card-body pt-0 w-100">
+                <table class="table table-striped table-responsive w-100">
                     <thead>
                         <tr>
                             <th>S.No.</th>

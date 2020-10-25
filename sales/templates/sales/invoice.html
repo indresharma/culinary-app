@@ -85,8 +85,8 @@
                         <th>#</th>
                         <th>ITEM</th>
                         <th>QUANTITY</th>
-                        <th>PRICE</th>
-                        <th class="total">TOTAL</th>
+                        <th>PRICE (INR)</th>
+                        <th class="total">TOTAL (INR)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -108,12 +108,12 @@
                     </tr>
                     <tr>
                         <td colspan="2"></td>
-                        <td colspan="2">TOTAL TAX</td>
+                        <td colspan="2">TOTAL TAX (GST)</td>
                         <td >{{order.get_total_tax}}</td>
                     </tr>
                     <tr>
                         <td colspan="2"></td>
-                        <td class="grandTotal" colspan="2">GRAND TOTAL</td>
+                        <td class="grandTotal" colspan="2">GRAND TOTAL (INR)</td>
                         <td class="grandTotal" >{{order.get_total_price}}</td>
                     </tr>
                 </tfoot>

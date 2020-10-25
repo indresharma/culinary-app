@@ -31,7 +31,12 @@ class OrderItem(BaseTracker):
         return f'{self.quantity} of {self.item.product}'
 
     def get_total_item_price(self):
+        """Returns total item price after discount and tax"""
         return self.quantity * self.price_after_tax
+
+    def get_total_item_price_before_tax(self):
+        """Returns total item price before discount and tax"""
+        return self.quantity * self.price_before_tax
 
 class Order(BaseTracker):
     customer = models.CharField(max_length=25, blank=True, null=True)
@@ -44,6 +49,7 @@ class Order(BaseTracker):
         return str(self.id)
 
     def get_total_price(self):
+        """Gets grand order total"""
         self.total_order_value=0
         for order_item in self.item.all():
             self.total_order_value+= order_item.get_total_item_price()
@@ -51,12 +57,14 @@ class Order(BaseTracker):
         return self.total_order_value
 
     def get_total_price_before_tax(self):
+        """Gets order total before tax"""
         total_price_before_tax=0
         for order_item in self.item.all():
-            total_price_before_tax+= order_item.price_before_tax
+            total_price_before_tax+= order_item.get_total_item_price_before_tax()
         return total_price_before_tax
 
     def get_total_tax(self):
+        """Returns Total Tax"""
         total_tax = self.get_total_price() - self.get_total_price_before_tax()
         return total_tax
 
