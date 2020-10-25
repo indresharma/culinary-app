@@ -18,6 +18,15 @@ class BaseTracker(models.Model):
 class Tags(BaseTracker):
     tag = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.tag
+
+class Category(BaseTracker):
+    category = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.category
+
 
 class Product(BaseTracker):
     """Finished Products available for selling"""
@@ -25,12 +34,17 @@ class Product(BaseTracker):
     description = models.TextField(blank=True, null=True)
     quantity_available = models.PositiveIntegerField(
         default=0, blank=True, null=True)
-    price = models.DecimalField(
+    price_before_tax = models.DecimalField(
         max_digits=6, decimal_places=2, blank=True, null=True)
+    tax = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
+    price_after_tax = models.DecimalField(
+        max_digits=6, decimal_places=2, blank=True, null=True)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True)
     tags = models.ManyToManyField('Tags')
     status = models.BooleanField(default=True, blank=True, null=True)
-    product_discount = models.PositiveSmallIntegerField(default=0,
-                                                        validators=[MaxValueValidator(10)], blank=True, null=True)
+    product_discount = models.PositiveSmallIntegerField(
+        default=0,
+        validators=[MaxValueValidator(10)], blank=True, null=True)
     image = models.ImageField(upload_to='pictures',
                               default='pictures/mypic.jpg')
     weight = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -52,6 +66,15 @@ class Product(BaseTracker):
             return 'Active'
         return 'Disabled'
 
+    def save(self, *args, **kwargs):
+        if self.product_discount:
+            price_after_discount = self.price_before_tax * (1-self.product_discount/100)
+            self.price_after_tax = price_after_discount * (1+self.tax/100)
+        else:
+            self.price_after_tax = self.price_before_tax * (1+self.tax/100)
+        super().save(*args, **kwargs)
+
+
 
 ##### Raw Materials ########
 
@@ -62,7 +85,6 @@ UNITS = (
     (4, 'KiloGrams.'),
     (5, 'Litres.'),
 )
-
 
 class RawMaterial(BaseTracker):
     item = models.CharField(max_length=25, blank=True, null=True)

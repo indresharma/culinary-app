@@ -1,14 +1,20 @@
 <div class="sidebar-sticky">
-    <ul class="nav flex-column">
+    <ul class="nav flex-column accordion">
         <li class="nav-item sidenav-list-item">
             <a class="nav-link" href="{% url 'products:dashboard' %}">
                 <span><i class="fa fa-bar-chart-o"></i></span> Dashboard<span class="sr-only">(current)</span>
             </a>
         </li>
         <li class="nav-item sidenav-list-item">
-            <a class="nav-link" href="{% url 'sales:billing' %}">
+            <a class="nav-link" data-toggle="collapse" href="#billingAccordian" aria-expanded="false" aria-controls="billingAccordian">            
                 <span><i class="fa fa-dollar"></i></span>  Billing
             </a>
+            <div class="collapse accordian" id="billingAccordian">
+                <div class="collapse-inner">
+                    <div class="collapse-item"><a href="{% url 'sales:billing' %}">Generate Invoice</a></div>
+                    <div class="collapse-item"><a href="{% url 'sales:orders' %}">Orders</a></div>
+                </div>  
+            </div>
         </li>
         <li class="nav-item sidenav-list-item">
             <a class="nav-link" href="{% url 'products:dashboard-products-list' %}">
@@ -16,9 +22,15 @@
             </a>
         </li>
         <li class="nav-item sidenav-list-item">
-            <a class="nav-link" href="{% url 'products:dashboard-stock-list' %}">
-                <span><i class="fa fa-truck"></i></span> Stock Management
+            <a class="nav-link" data-toggle="collapse" href="#stockAccordian" aria-expanded="false" aria-controls="stockAccordian">            
+                <span><i class="fa fa-truck"></i></span>  Stock Management
             </a>
+            <div class="collapse accordian" id="stockAccordian">
+                <div class="collapse-inner">
+                    <div class="collapse-item"><a href="{% url 'products:dashboard-stock-list' %}">Raw Materials</a></div>
+                    <div class="collapse-item"><a href="#">Products</a></div>
+                </div>  
+            </div>
         </li>
         <li class="nav-item sidenav-list-item">
             <a class="nav-link" href="#">

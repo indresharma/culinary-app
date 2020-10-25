@@ -4,17 +4,6 @@
 {% block main %}
 
 
-
-
-<div class="row">
-    <div class="col-md-12 py-3 text-right">
-        <h2 class="float-left">Dashboard</h2>
-        <a href="{% url 'products:dashboard-product-add' %}" class="btn btn-outline-secondary btn-sm addStockBtn">
-            <span>+</span>Add Products
-        </a>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-md-12">
         <div class="table-responsive">
@@ -22,15 +11,11 @@
                 <thead class="thead-custom">
                     <tr>
                         <th>S.No.</th>
-                        <th>Name</th>
-                        <th>Weight</th>
-                        <th>Best Before</th>
-                        <th>Price Before Tax</th>
-                        <th>Tax (%)</th>
-                        <th>Price After Tax</th>
-                        <th>Product discount (%)</th>
-                        <th>Quantity Available</th>
-                        <th>Status</th>
+                        <th>Customer</th>
+                        <th>Customer Phone</th>
+                        <th>Items</th>
+                        <th>Total Order value</th>
+                        <th>Ordered Date</th>
                         <th style="width: 90px;">Action</th>
                     </tr>
                 </thead>
@@ -38,26 +23,15 @@
                     {% for item in object_list %}
                     <tr>
                         <th>{{forloop.counter}}</th>
-                        <td>{{item.product}}</td>
-                        <td>{{item.weight}}</td>
-                        <td>{{item.best_before}}</td>
-                        <td>{{item.price_before_tax}}</td>
-                        <td>{{item.tax}}</td>
-                        <td class="text-right">{{item.price_after_tax}}</td>
-                        <td>{{item.product_discount}}</td>
-                        <td>{{item.quantity_available}}</td>
-                        <td>{{item.get_status}}</td>
+                        <td>{{item.customer}}</td>
+                        <td>{{item.customer_phone}}</td>
+                        <td>{{item.get_items}}</td>
+                        <td>{{item.total_order_value}}</td>
+                        <td>{{item.created_at|date:'d M Y'}}</td>
                         <td>
-                            <form method="POST">
-                                {% csrf_token %}
-                                <a href="{% url 'products:dashboard-product-update' item.id %}" data-id="{{item.id}}" update="1"
-                                    class="updateBtn"><i class="fa fa-pencil"></i></a>
-
-                                <a href="javascript:void(0);" data-id="{{item.id}}" product_delete="1" class="deleteBtn"><i
-                                        class="fa fa-trash"></i></a>
-                            </form>
-
+                            <a href="{% url 'sales:get_invoice' item.id %}" class="btn btn-sm btn-outline-info">View</a>
                         </td>
+
                     </tr>
                     {% empty %}
                     <tr>

@@ -11,27 +11,58 @@ class OrderItem(BaseTracker):
     ordered = models.BooleanField(default=False)
     quantity = models.IntegerField(default=1)
 
+    price_before_tax = models.DecimalField(
+        max_digits=6, decimal_places=2, blank=True, null=True)
+    tax = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
+    price_after_tax = models.DecimalField(
+        max_digits=6, decimal_places=2, blank=True, null=True)
+    product_discount = models.PositiveSmallIntegerField(
+        default=0, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.price_before_tax = self.item.price_before_tax
+            self.tax = self.item.tax
+            self.price_after_tax = self.item.price_after_tax
+            self.product_discount = self.item.product_discount
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f'{self.quantity} of {self.item.product}'
 
-    def total_item_price(self):
-        return self.quantity * self.item.price
+    def get_total_item_price(self):
+        return self.quantity * self.price_after_tax
 
 class Order(BaseTracker):
+    customer = models.CharField(max_length=25, blank=True, null=True)
+    customer_phone = models.CharField(max_length=10, blank=True, null=True)
     item = models.ManyToManyField('OrderItem')
     ordered = models.BooleanField(default=False)
     total_order_value = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
-    discount = models.PositiveSmallIntegerField(blank=True, null=True)
-
+    
     def __str__(self):
-        return self.user.username
+        return str(self.id)
 
-    def total_price(self):
-        total=0
+    def get_total_price(self):
+        self.total_order_value=0
         for order_item in self.item.all():
-            total+= order_item.total_item_price()
-        return total
+            self.total_order_value+= order_item.get_total_item_price()
+        self.save()
+        return self.total_order_value
 
-    # def discounted_price(self):
-    #     return self.total_price()*(100-self.coupon.discount)/100
-        
+    def get_total_price_before_tax(self):
+        total_price_before_tax=0
+        for order_item in self.item.all():
+            total_price_before_tax+= order_item.price_before_tax
+        return total_price_before_tax
+
+    def get_total_tax(self):
+        total_tax = self.get_total_price() - self.get_total_price_before_tax()
+        return total_tax
+
+    def get_items(self):
+        items = ''
+        for item in self.item.all():
+            items += f'{item}, '
+            
+        return items

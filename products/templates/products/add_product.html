@@ -17,19 +17,25 @@
             <div class="card-body">
                 <h5 class="card-title text-center m-3">Add Products</h5>
                 <div class="row form-group">
-                    <div class="col-md-6 col-sm-6 inputDiv">
+                    <div class="col-md-3 col-sm-6 inputDiv">
                         {{ form.product|as_crispy_field }}
                     </div>
-                    <div class="col-md-6 col-sm-6 inputDiv file-attachment">
+                    <div class="col-md-3 col-sm-6 inputDiv">
+                        {{ form.weight|as_crispy_field }}
+                    </div>
+                    <div class="col-md-3 col-sm-6 inputDiv">
+                        {{ form.category|as_crispy_field }}
+                    </div>
+                    <div class="col-md-3 col-sm-6 inputDiv file-attachment">
                         {{ form.image |as_crispy_field }}
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-md-3 col-sm-6 inputDiv">
-                        {{ form.weight|as_crispy_field }}
+                        {{ form.price_before_tax |as_crispy_field }}
                     </div>
                     <div class="col-md-3 col-sm-6 inputDiv">
-                        {{ form.price |as_crispy_field }}
+                        {{ form.tax|as_crispy_field }}
                     </div>
                     <div class="col-md-3 col-sm-6 inputDiv">
                         {{ form.product_discount|as_crispy_field }}
