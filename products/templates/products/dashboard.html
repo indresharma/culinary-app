@@ -4,16 +4,16 @@
 {% block body %}
 
 <div class="container-fluid">
-    <div class="row dashboardContainer">
-        <nav class="col-md-2 d-none d-md-block sidebar sidenav">
+    <div class="row dashboardContainer h-100">
+        <nav class="nav navbar col-md-2 sidenav navbar-expand-md">
             {% include 'products/dashboard_sidebar.html'%}
         </nav>
-        
+
         <main role="main" class="col-md-10 col-lg-10">
             {% block main %}
             {% endblock main %}
         </main>
-        
+
     </div>
 </div>
 

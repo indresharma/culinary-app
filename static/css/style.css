@@ -107,49 +107,56 @@ body {font-family: 'Open Sans', sans-serif !important; font-size:13px;font-weigh
 
 /* Dashboard CSS */
 
+.dashboardContainer{
+    min-height: 450px;
+}
+
+.dashboardContainer .sidenav {
+    align-items: flex-start;
+}
+
+#navbarNavDropdown{
+    padding-top: 0;
+}
 .sidenav {
 background-color: #baaf92;
 }
 
-.sidenav-list {
-padding: 0;
-list-style-type: none;
-}
-
-.sidenav-list-item {
+#accordian .nav-item {
 color: #FFF;
+min-width: 100%;
+padding: 0;
 }
 
-.sidenav-list-item:hover {
+#accordian .nav-item:hover {
 background-color: rgba(255, 255, 255, 0.2);
 font-weight: bold;
 cursor: pointer;
+width: 100%;
 }
 
-.sidenav-list-item a{color: #FFF;}
-.sidenav-list-item a:hover{color: #ff8426; text-decoration: none;}
+#accordian .nav-item a{color: rgba(0, 0, 0, 0.5);}
+#accordian .nav-item a:hover{color: #ff8426;}
 
-.accordian div .collapse-item {
+
+/* .accordian div .collapse-item {
     padding-left: 15%;
     padding-bottom: 5px;
-}
-/* .main {
-grid-area: main;
-background-color: #8fd4d9;
 } */
 
-
-/* @media screen and (max-width: 600px){
-.grid-container {
-    grid-template-columns: 120px 1fr;
+.customAccord{
+    background-color: #FFF;
+    border-radius: 3px;
+    width: 100%;
 }
 
-.sidenav-list-item {
-    padding: 15px 15px 15px 20px;
-    color: #FFF;
-    }
+/* .customAccord div div{
+    padding-left: 15%;
+    padding-top: 5px;
+    color: #000;
 } */
-  
+
+ 
 .thead-custom {
     background-color: rgba(255, 255, 255, 0.575);
 }
@@ -161,7 +168,14 @@ background-color: #8fd4d9;
 .deleteBtn, .stockDeleteBtn {background: transparent; color: #d60202; padding: 5px 5px;font-size: 18px;}
 .deleteBtn:hover, .stockDeleteBtn:hover{background-color: rgba(255, 255, 255, 0.575); border-radius: 5px;}
   
-.dashboardHeading{font-weight: 600; font-size: large; color: #FFF; border-bottom: 1px solid; padding-bottom: 5px;}
+.dashboardHeading{font-weight: 600; font-size: large; color: #FFF; text-decoration: underline;}
 .billingTable .card-header .card-footer{background-color: #FFF;}
 
 .card .col-auto i{color: rgba(0, 0, 0, 0.5);}
+
+
+
+
+
+/* Delete if not work */
+
