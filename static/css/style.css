@@ -89,20 +89,20 @@ body {font-family: 'Open Sans', sans-serif !important; font-size:13px;font-weigh
     object-fit: cover;
 }
 
-@media only screen and (max-width: 600px) {
+@media screen and (max-width: 600px) {
     .card-img-top {
         width: 100%;
-        height: 55vh;
+        height: 300px;
         object-fit: cover;
     }
   }
 
 .btn-outline-orange{
     background-color: transparent;
-    border: 2px solid #ff8426;
+    border: 1px solid #ff8426;
     color: #ff8426;
 }
-.btn-outline-orange:hover{background-color: #ff8426;}
+.btn-outline-orange:hover{background-color: #ff8426; color: #fff;}
 
 
 /* Dashboard CSS */
@@ -126,6 +126,7 @@ background-color: #baaf92;
 color: #FFF;
 min-width: 100%;
 padding: 0;
+font-size: 15px;
 }
 
 #accordian .nav-item:hover {
@@ -135,7 +136,7 @@ cursor: pointer;
 width: 100%;
 }
 
-#accordian .nav-item a{color: rgba(0, 0, 0, 0.5);}
+#accordian .nav-item a{color: rgba(0, 0, 0, 0.7);}
 #accordian .nav-item a:hover{color: #ff8426;}
 
 
@@ -173,8 +174,47 @@ width: 100%;
 
 .card .col-auto i{color: rgba(0, 0, 0, 0.5);}
 
+.row .col-md-12 h2 {text-transform: uppercase; font-size: 27px; color: rgba(0, 0, 0, 0.7);}
 
+.filtercontainer {
+    position: relative;
+    margin-bottom: 30px;
+}
+.filter {
+    background: #fff;
+    padding: 15px 0px;
+}
 
+.filter .row {
+    width: 100%;
+}
+
+.filter input {
+    height: 31px;
+}
+
+.filterBtn{
+    background: #fff;
+    position: absolute;
+    right: 0%;
+}
+
+.sliderBtn{
+    border-radius: 0px;
+    padding: 3px 20px;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-top: 3px;
+}
+
+.sliderBtn:hover {
+    border-radius: 0px;
+}
+
+.filterToggle {
+    display: none;
+}
 
 
 /* Delete if not work */

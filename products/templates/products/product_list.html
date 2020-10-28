@@ -1,29 +1,102 @@
 {% extends 'users/base.html' %}
 {% load static %}
 {% block body %}
-<div class="container">
-    <div class="row">
-        {% for item in object_list %}
-        <div class="col-md-2 col-sm-6 p-3">
-            <div class="card h-100 clickable" data-id="{{item.id}}">
-                <img class="card-img-top" src="{{item.image.url}}" />
-                <div class="card-footer prodFooter">
-                    <h5>{{item.product}}</h5>
-                    <p>Price: {{item.price}}</p>
+<div class="filtercontainer">
+    <form method="GET">
+        <div class="filter">
+            <div class="container">
+                {% with filter.form as f %}
+                <div class="row form-group">
+                    <div class="col-md-3">
+                        <input type="text" name="{{f.product__icontains.name}}" class="form-control"
+                            placeholder="Product Name" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" name="{{f.price_after_tax__gte.name}}" class="form-control"
+                            placeholder="Price Greater Than" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" name="{{f.price_after_tax__lte.name}}" class="form-control"
+                            placeholder="Price Less Than" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="{{f.tags__tag__icontains.name}}" class="form-control"
+                            placeholder="Tags" />
+                    </div>
                 </div>
+                <div class="row form-group">
+                    <div class="col-md-3">
+                        <input type="number" name="{{f.product_discount__gte.name }}" class="form-control"
+                            placeholder="Discount Greater Than" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" name="{{f.product_discount__lte.name }}" class="form-control"
+                            placeholder="Discount Less Than" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" name="{{f.weight__gte.name }}" class="form-control"
+                            placeholder="Weight Greater Than" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" name="{{f.weight__lte.name }}" class="form-control"
+                            placeholder="Weight Less Than" />
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-3">
+                        <input type="text" name="{{f.base_ingredient__icontains.name }}" class="form-control"
+                            placeholder="Base Ingredient" />
+                    </div>
+                    <div class="col text-right">
+                        <button type="button" class="btn btn-sm btn-outline-orange refreshBtn"><i class="fa fa-refresh"></i>  Reset</button>
+                        <button type="submit" class="btn btn-sm btn-outline-orange">Apply Filter</button>
+                    </div>
+                </div>
+                {% endwith %}
             </div>
         </div>
-        {% endfor %}
+        <div class="filterBtn">
+            <span class="sliderBtn">Filter <i class="fa fa-angle-down"></i></span>
+        </div>
+    </form>
+
+</div>
+
+<div class="prodWrapper mt-3">
+
+    <div class="container">
+        <div class="row">
+            {% for item in object_list %}
+            <div class="col-md-2 col-sm-6 p-3">
+                <div class="card h-100 clickable" data-id="{{item.id}}">
+                    <img class="card-img-top" src="{{item.image.url}}" />
+                    <div class="card-footer prodFooter">
+                        <h5>{{item.product}}</h5>
+                        <p>Price: {{item.price_after_tax}}</p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center">
+                No Product matches your Query.
+            </div>
+            {% endfor %}
+        </div>
+
+
     </div>
 </div>
 
-<!-- <script>
-    $(function(){
-        $(document).on('click', '.clickable', function(){
-            const pk = $(this).attr('data-id');
-            location.href = `/products/${pk}/`
+<script>
+    $(function () {
+        $('.sliderBtn').click(function () {
+            $('.filter').slideToggle('slow')
+        });
+
+        $('.refreshBtn').click(function(){
+            location.href = location.pathname
         })
-    })
-</script> -->
+    });
+</script>
 
 {% endblock body %}

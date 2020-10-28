@@ -1,6 +1,6 @@
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-  aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" style="{color: #000;}"><i
-    class="fa fa-caret-right"></i></button>
+  aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" style="{color: #000;}">
+  Dashboard <i class="fa fa-caret-right"></i></button>
 
 
 <div class="collapse navbar-collapse flex-column" id="navbarNavDropdown">
@@ -22,7 +22,7 @@
       </a>
       <div class="dropdown-menu customAccord" aria-labelledby="stockAccordian">
         <a class="dropdown-item" href="{% url 'products:dashboard-stock-list' %}">Raw Materials</a>
-        <a class="dropdown-item" href="#">Products</a>
+        <a class="dropdown-item" href="{% url 'products:dashboard-product-stock-list' %}">Products</a>
       </div>
     </li>
     <li class="nav-item dropdown">

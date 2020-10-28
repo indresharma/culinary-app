@@ -93,9 +93,18 @@ $(document).on('click', '.addItemBtn', function(){
 
 $(document).on('click', '#saveItem', function(){
     var form = $(this).closest('form')[0]
+    var product_stock = $(this).attr('product_stock');
+    var url;
+
+    if (product_stock){
+        url = '/dashboard/products/stock/add/'
+    } else {
+        url = `/dashboard/raw_material/add/`
+    }
+
     $.ajax({
         type: 'POST',
-        url: `/dashboard/raw_material/add/`,
+        url: url,
         data: new FormData(form),
         contentType: false,
         processData: false,
@@ -113,5 +122,13 @@ $(document).on('change', '#id_item', function(){
     var pk = $(this).val()
     $.get('/get_unit/', {'pk': pk}, function(res, status){
         $('#unitReadOnly').val(res['unit'])
+    });
+});
+
+
+$(document).on('click', '.addProductStockBtn', function(){
+    $.get('/dashboard/products/stock/add/', function(res, status) {
+        $('#productStockModal').html(res['html']);
+        $('#productStockModal').modal('show')
     });
 });

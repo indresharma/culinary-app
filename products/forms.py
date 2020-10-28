@@ -54,5 +54,16 @@ class RMStockUpdateForm(forms.ModelForm):
         self.fields['quantity'].disabled = True
 
 
+class ProductStockForm(forms.ModelForm):
+    class Meta:
+        model = ProductStock
+        fields = '__all__'
+        labels = {
+            'price': 'Price per Unit',
+        }
+        widgets = {
+           'validity': forms.TextInput(attrs={'type': 'date'}) 
+        }
+
     
 

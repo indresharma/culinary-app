@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'products',
     'sales',
+    'django_filters'
 ]
+
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 SUMMERNOTE_THEME = 'bs4'
 

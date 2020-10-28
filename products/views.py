@@ -8,9 +8,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
+from django_filters.views import FilterView
 
 from .models import *
 from .forms import *
+from .filters import ProductFilter
 
 ############## Helper Function #######################
 
@@ -25,13 +27,18 @@ class CustomAuthMixin(LoginRequiredMixin, PermissionRequiredMixin):
     permission_required = []
 
 
-class ProductListView(ListView):
+class ProductListView(FilterView):
     model = Product
-    template_name = 'products/list_product.html'
+    template_name = 'products/product_list.html'
     paginate_by = 10
+    filterset_class = ProductFilter
 
     def get_queryset(self):
         return Product.objects.all().order_by('-id')
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+
 
 
 class ProductCreateView(CustomAuthMixin, SuccessMessageMixin, CreateView):
@@ -98,10 +105,14 @@ class RawMaterialCreateView(CustomAuthMixin, SuccessMessageMixin, CreateView):
     
     def form_valid(self, form):
         instance = form.save(commit=False)
-        instance.create_by = self.request.user
+        instance.created_by = self.request.user
         instance.save()
         messages.success(self.request, self.success_message)
         return JsonResponse({'status': True})
+
+    def form_invalid(self, form):
+        print(form.errors)
+        super().form_invalid(form)
 
 
 class StockListView(ListView):
@@ -139,3 +150,19 @@ class StockDeleteView(CustomAuthMixin, SuccessMessageMixin, DeleteView):
         messages.success(request, self.success_message)
         payload = {'status': True, 'message': 'Deleted'}
         return JsonResponse(payload)
+
+
+class ProductStockListView(ListView):
+    model = ProductStock
+    template_name = 'products/dashboard_product_stock.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return self.model.objects.all().order_by('-id')
+
+class ProductStockCreateView(RawMaterialCreateView):
+    permission_required = ['products.add_productstock']
+    form_class = ProductStockForm
+    template_name = 'products/dashboard_product_stock_add.html'
+    success_message = 'Item added Successfully'
+

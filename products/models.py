@@ -15,6 +15,17 @@ class BaseTracker(models.Model):
         abstract = True
 
 
+class BaseStock(BaseTracker):
+    quantity = models.PositiveSmallIntegerField(blank=True, null=True)
+    price = models.DecimalField(
+        max_digits=8, decimal_places=2, blank=True, null=True)
+    validity = models.DateField(blank=True, null=True)
+    
+    class Meta:
+        abstract = True
+
+
+
 class Tags(BaseTracker):
     tag = models.CharField(max_length=20)
 
@@ -66,12 +77,36 @@ class Product(BaseTracker):
             return 'Active'
         return 'Disabled'
 
+    # def get_sale_price_after_discount(self):
+    #     if self.product_discount:
+    #         return self.price_before_tax * (1-self.product_discount/100)
+    #     return self.price_before_tax
+
+    # def get_sale_price_after_tax(self):
+    #     if self.price_before_tax:
+
+
+
     def save(self, *args, **kwargs):
         if self.product_discount:
             price_after_discount = self.price_before_tax * (1-self.product_discount/100)
             self.price_after_tax = price_after_discount * (1+self.tax/100)
         else:
             self.price_after_tax = self.price_before_tax * (1+self.tax/100)
+        super().save(*args, **kwargs)
+
+
+class ProductStock(BaseStock):
+    product = models.ForeignKey(
+        'Product', on_delete=models.CASCADE, related_name='product_stock')
+
+    def __str__(self):
+        return str(self.product)
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            Product.objects.filter(id=self.product_id).update(
+                quantity_available=F('quantity_available') + self.quantity)
         super().save(*args, **kwargs)
 
 
@@ -100,17 +135,13 @@ class RawMaterial(BaseTracker):
         return self.get_unit_display()
 
 
-class RMStock(BaseTracker):
+class RMStock(BaseStock):
     PAYMENT_CHOICES = (
         ('Done', 'Done'),
         ('Pending', 'Pending'),
     )
     item = models.ForeignKey(
         'RawMaterial', on_delete=models.CASCADE, related_name='rm_stock')
-    quantity = models.PositiveSmallIntegerField(blank=True, null=True)
-    price = models.DecimalField(
-        max_digits=8, decimal_places=2, blank=True, null=True)
-    validity = models.DateField(blank=True, null=True)
     supplier = models.CharField(max_length=255, blank=True, null=True)
     payment_status = models.CharField(
         max_length=10, choices=PAYMENT_CHOICES, blank=True, null=True)
