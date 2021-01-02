@@ -11,7 +11,7 @@ class ProductFilter(FilterSet):
         fields = {
             'product' : ['icontains'],
             'price_after_tax' : ['gte', 'lte'],
-            'category' : [],
+            'category__category' : ['icontains'],
             'tags__tag' : ['icontains'],
             'status' : ['iexact'],
             'product_discount' : ['gte', 'lte'],

@@ -74,3 +74,7 @@ class Order(BaseTracker):
             items += f'{item}, '
             
         return items
+
+
+class Invoices(BaseTracker):
+    pass

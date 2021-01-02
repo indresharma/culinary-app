@@ -4,6 +4,14 @@
 html, body {height: 100%;}
 body {font-family: 'Open Sans', sans-serif !important; font-size:13px;font-weight:400; background-color: #f2eee3;}
 
+.navbar-brand{
+    margin: 0px;
+    padding: 0px;
+}
+.navbar-brand a img{
+    width: 135px;
+    height: 55px;
+}
 /* #baseDiv {min-height: 100%;} */
 
 /* #mainDiv {
@@ -215,7 +223,18 @@ width: 100%;
 .filterToggle {
     display: none;
 }
+.billingTable .form-control-sm{
+    width: 100%;
+    border: 1px solid #000;
+}
+
+.card .btn-outline-orange, .filtercontainer .btn-outline-orange{
+    border-radius: 0px;
+}
+
+.emptyContent {min-height: 280px; position: relative}
+
+.emptyContent h3 {text-align: center;}
 
 
-/* Delete if not work */
 
